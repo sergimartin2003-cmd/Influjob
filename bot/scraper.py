@@ -123,14 +123,19 @@ def extract_company(title: str) -> tuple[str, str]:
 
 def scrape_rss(source: dict) -> int:
     print(f"\n📡 {source['name']}")
+    print(f"   URL: {source['url']}")
     try:
         feed = feedparser.parse(source["url"])
     except Exception as e:
         print(f"   ✗ Error al obtener feed: {e}")
         return 0
 
+    print(f"   Entradas recibidas: {len(feed.entries)}")
+    if feed.bozo:
+        print(f"   ⚠ Feed con error de parseo: {feed.bozo_exception}")
+
     if not feed.entries:
-        print("   ℹ Sin resultados")
+        print("   ℹ Sin resultados — el feed puede estar bloqueando bots")
         return 0
 
     inserted = 0
@@ -144,6 +149,7 @@ def scrape_rss(source: dict) -> int:
             continue
 
         estado = get_estado(title_raw, description)
+        print(f"   → [{estado or 'descartada'}] {title_raw[:70]}")
         if estado is None:
             continue  # oferta no relevante para discapacidad
 
