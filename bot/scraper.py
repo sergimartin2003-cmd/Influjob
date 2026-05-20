@@ -12,8 +12,8 @@ from datetime import datetime
 SB_URL = "https://kqrzdyxziystnsczalus.supabase.co"
 SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcnpkeXh6aXlzdG5zY3phbHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzkyMTUsImV4cCI6MjA5NDg1NTIxNX0.9vJRL0AN-u56Qs_DlbI7N-QMddkR6XIj3thRrWkxTEw"
 
-ADZUNA_ID  = os.environ["ADZUNA_APP_ID"]
-ADZUNA_KEY = os.environ["ADZUNA_APP_KEY"]
+ADZUNA_ID  = "bef3158f"
+ADZUNA_KEY = "a5e39157fcf4336140585f0ca2d2c722"
 
 SB_HEADERS = {
     "apikey":        SB_KEY,
