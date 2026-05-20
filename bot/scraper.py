@@ -163,7 +163,7 @@ for query in SEARCHES:
             "source_url":    link,
             "external_id":   ext_id,
             "fuente":        "Adzuna",
-            "estado":        estado
+            "estado":        "pendiente"  # el trigger decide si publicar según keywords
         }
 
         if insert_job(payload):
