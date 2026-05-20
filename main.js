@@ -147,7 +147,7 @@
       '<div class="job-info">' +
         '<span class="job-city">' + SVG_PIN + ' ' + escHTML(job.city) + '</span>' +
         '<span class="job-contract">' + escHTML(job.contract) + '</span>' +
-        (job.salary ? '<span class="job-salary">' + escHTML(job.salary) + '/año</span>' : '') +
+        (job.salary ? '<span class="job-salary">' + escHTML(job.salary) + '</span>' : '') +
       '</div>' +
       (disaBadges ? '<div class="job-disabilities" aria-label="Compatible con discapacidad">' + disaBadges + '</div>' : '') +
       '<div class="job-actions">' +
@@ -161,11 +161,15 @@
   let activeCity = "";
   let activeText = "";
 
-  // Pagination
-  const CARDS_PER_PAGE = 6;
+  // Pagination — currentShownCount persists across auto-refreshes so jobs don't "disappear"
+  const CARDS_PER_PAGE = 12;
   let totalMatches = 0;
+  let currentShownCount = CARDS_PER_PAGE;
 
-  function applyFilters() {
+  // resetPage=true when the user changes a filter; false on auto-refresh (preserves shown count)
+  function applyFilters(resetPage) {
+    if (resetPage) currentShownCount = CARDS_PER_PAGE;
+
     const cards       = $$(".job-card");
     const selModality   = $("#filter-modality");
     const selContract   = $("#filter-contract");
@@ -204,25 +208,24 @@
 
     totalMatches = matchingCards.length;
 
-    // Apply pagination on top of filter — reset to first page on every filter change
+    // Pagination — use currentShownCount so auto-refresh doesn't collapse what the user expanded
     matchingCards.forEach((card, i) => {
-      const paginated = i >= CARDS_PER_PAGE;
+      const paginated = i >= currentShownCount;
       card.classList.toggle("is-paginated", paginated);
       card.setAttribute("aria-hidden", paginated ? "true" : "false");
     });
-    // Cards hidden by filter
     cards.forEach(card => {
       if (card.classList.contains("is-hidden")) card.setAttribute("aria-hidden", "true");
     });
 
-    const visibleNow = Math.min(totalMatches, CARDS_PER_PAGE);
+    const visibleNow = Math.min(totalMatches, currentShownCount);
     if (counter) counter.textContent = String(totalMatches);
 
     const emptyEl  = $("#jobs-empty");
     const loadMore = $("#jobs-load-more");
     if (emptyEl)  emptyEl.hidden  = totalMatches > 0;
     if (loadMore) {
-      loadMore.hidden = totalMatches <= CARDS_PER_PAGE;
+      loadMore.hidden = totalMatches <= currentShownCount;
       const hint = $(".jobs-load-hint");
       if (hint) hint.textContent = `Mostrando ${visibleNow} de ${totalMatches} ofertas`;
     }
@@ -249,7 +252,7 @@
     if (heroCity) heroCity.value = "";
     if (heroQ)    heroQ.value    = "";
     if (heroDis)  heroDis.value  = "";
-    applyFilters();
+    applyFilters(true);
   });
 
   function safe(fn, name) {
@@ -416,7 +419,7 @@
   function initFilters() {
     ["#filter-modality", "#filter-contract", "#filter-oficio", "#filter-disability"].forEach(id => {
       const sel = $(id);
-      if (sel) sel.addEventListener("change", applyFilters);
+      if (sel) sel.addEventListener("change", () => applyFilters(true));
     });
 
     // Establecer estado inicial (aria-hidden + paginación)
@@ -430,6 +433,7 @@
         const paginated = $$(".job-card.is-paginated");
         if (!paginated.length) return;
 
+        currentShownCount += CARDS_PER_PAGE;
         paginated.slice(0, CARDS_PER_PAGE).forEach(card => {
           card.classList.remove("is-paginated");
           card.setAttribute("aria-hidden", "false");
@@ -473,7 +477,7 @@
       const selDis = $("#filter-disability");
       if (selDis) selDis.value = disVal;
 
-      applyFilters();
+      applyFilters(true);
       scrollToJobs();
     });
 
@@ -517,7 +521,7 @@
           }
         }
 
-        applyFilters();
+        applyFilters(true);
         scrollToJobs();
       });
     });
@@ -815,7 +819,7 @@
         activeCity = norm(city);
         const heroCity = $("#search-city");
         if (heroCity) heroCity.value = city.charAt(0).toUpperCase() + city.slice(1);
-        applyFilters();
+        applyFilters(true);
         closeBot();
         const empleos = $("#empleos");
         if (empleos) empleos.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
@@ -935,6 +939,8 @@
     var grid = $("[data-jobs]");
     if (!grid || !jobs.length) return;
     grid.innerHTML = jobs.map(buildCardHTML).join("");
+    // Cards injected after boot are not observed by IntersectionObserver — reveal immediately
+    $$(".job-card.reveal", grid).forEach(function(el) { el.classList.add("is-visible"); });
     applyFilters();
   }
 
@@ -1046,6 +1052,7 @@
   function boot() {
     safe(initNav,           "initNav");
     safe(initSmoothScroll,  "initSmoothScroll");
+    safe(initSupabase,      "initSupabase");   // render jobs first so initTilt/initReveals see them
     safe(initReveals,       "initReveals");
     safe(initFilters,       "initFilters");
     safe(initHeroSearch,    "initHeroSearch");
@@ -1056,7 +1063,6 @@
     safe(initTilt,          "initTilt");
     safe(initMouseGradient, "initMouseGradient");
     safe(initDarkMode,      "initDarkMode");
-    safe(initSupabase,      "initSupabase");
 
     if (window.gsap && window.ScrollTrigger) {
       safe(initGsap, "initGsap");
