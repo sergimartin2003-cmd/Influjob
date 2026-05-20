@@ -3,11 +3,14 @@ IncluJob — Bot de scraping via Adzuna API (España)
 Busca ofertas para personas con discapacidad y las sube a Supabase
 """
 
+import sys
 import os
 import re
 import hashlib
 import requests
 from datetime import datetime
+
+sys.stdout.reconfigure(encoding="utf-8")
 
 SB_URL = "https://kqrzdyxziystnsczalus.supabase.co"
 SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcnpkeXh6aXlzdG5zY3phbHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzkyMTUsImV4cCI6MjA5NDg1NTIxNX0.9vJRL0AN-u56Qs_DlbI7N-QMddkR6XIj3thRrWkxTEw"
@@ -100,7 +103,7 @@ def search_adzuna(query: str, page: int = 1) -> list:
         r.raise_for_status()
         return r.json().get("results", [])
     except Exception as e:
-        print(f"   ✗ Error Adzuna: {e}")
+        print("Error Adzuna: " + str(e))
         return []
 
 
@@ -110,22 +113,22 @@ def insert_job(job: dict) -> bool:
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
-print(f"🤖 IncluJob Scraper — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+print("IncluJob Scraper - " + datetime.now().strftime("%Y-%m-%d %H:%M"))
 
 seen_ids = set()
 total = 0
 
 for query in SEARCHES:
-    print(f"\n🔍 Buscando: '{query}'")
+    print("\nBuscando: " + query)
     results = search_adzuna(query)
-    print(f"   Resultados: {len(results)}")
+    print("Resultados: " + str(len(results)))
 
     for job in results:
-        title   = clean(job.get("title", ""))
-        desc    = clean(job.get("description", ""))
-        company = clean(job.get("company", {}).get("display_name", ""))
+        title    = clean(job.get("title", ""))
+        desc     = clean(job.get("description", ""))
+        company  = clean(job.get("company", {}).get("display_name", ""))
         location = clean(job.get("location", {}).get("display_name", ""))
-        link    = job.get("redirect_url", job.get("id", ""))
+        link     = job.get("redirect_url", str(job.get("id", "")))
         salary_min = job.get("salary_min")
         salary_max = job.get("salary_max")
 
@@ -133,21 +136,21 @@ for query in SEARCHES:
             continue
 
         estado = get_estado(title, desc)
-        print(f"   [{estado or 'descartada'}] {title[:65]}")
+        print("  [" + (estado or "descartada") + "] " + title[:65])
         if estado is None:
             continue
 
         ext_id = make_id(str(job.get("id", link)))
         if ext_id in seen_ids or exists(ext_id):
-            print(f"      → ya existe")
+            print("    -> ya existe")
             continue
         seen_ids.add(ext_id)
 
         salario = ""
         if salary_min and salary_max:
-            salario = f"{int(salary_min):,} – {int(salary_max):,} €/año".replace(",", ".")
+            salario = str(int(salary_min)) + " - " + str(int(salary_max)) + " EUR/anio"
         elif salary_min:
-            salario = f"Desde {int(salary_min):,} €/año".replace(",", ".")
+            salario = "Desde " + str(int(salary_min)) + " EUR/anio"
 
         modalidad = "remoto" if "remoto" in (title + desc + location).lower() else "presencial"
         ciudad = city_from(location, title)
@@ -163,14 +166,13 @@ for query in SEARCHES:
             "source_url":    link,
             "external_id":   ext_id,
             "fuente":        "Adzuna",
-            "estado":        "pendiente"  # el trigger decide si publicar según keywords
+            "estado":        "pendiente"
         }
 
         if insert_job(payload):
-            icon = "✅" if estado == "publicada" else "⏳"
-            print(f"      {icon} insertada")
+            print("    OK insertada [" + estado + "]")
             total += 1
         else:
-            print(f"      ✗ Error al insertar")
+            print("    ERROR al insertar")
 
-print(f"\n✔ Total insertadas: {total}")
+print("\nTotal insertadas: " + str(total))
