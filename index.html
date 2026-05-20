@@ -1,0 +1,1074 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="IncluJob — Portal de empleo para personas con discapacidad en España. Ofertas presenciales, remotas e híbridas seleccionadas por nuestro equipo. Acceso gratuito para candidatos.">
+  <title>IncluJob — Tu talento no tiene límites</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
+
+  <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=20260519">
+
+  <!-- Open Graph / redes sociales -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="IncluJob — Tu talento no tiene límites">
+  <meta property="og:description" content="Portal de empleo inclusivo para personas con discapacidad en España. Ofertas presenciales, remotas e híbridas. Acceso gratuito para candidatos.">
+  <meta property="og:image"       content="assets/img/hero.webp">
+  <meta property="og:locale"      content="es_ES">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="IncluJob — Tu talento no tiene límites">
+  <meta name="twitter:description" content="Portal de empleo inclusivo para personas con discapacidad en España. Ofertas presenciales, remotas e híbridas. Acceso gratuito.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a3a6b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%232ecc71' font-family='sans-serif' font-weight='bold'>IJ</text></svg>">
+</head>
+<body>
+
+  <!-- Skip link -->
+  <a class="skip-link" href="#main">Ir al contenido principal</a>
+
+  <!-- Accessibility toolbar -->
+  <div class="a11y-toolbar" role="toolbar" aria-label="Herramientas de accesibilidad">
+    <button type="button" class="a11y-btn" data-a11y="font-dec" aria-label="Reducir tamaño de fuente" title="Reducir fuente">A−</button>
+    <button type="button" class="a11y-btn" data-a11y="font-inc" aria-label="Aumentar tamaño de fuente" title="Aumentar fuente">A+</button>
+    <button type="button" class="a11y-btn" data-a11y="contrast" aria-label="Activar alto contraste" title="Alto contraste" aria-pressed="false">◑</button>
+    <button type="button" class="a11y-btn" data-a11y="dark-mode" aria-label="Activar modo oscuro" title="Modo oscuro" aria-pressed="false">☾</button>
+  </div>
+
+  <!-- Nav -->
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="IncluJob — Ir a inicio">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#1a3a6b"/>
+          <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#2ecc71" font-family="sans-serif" font-weight="800">IJ</text>
+        </svg>
+        <span>IncluJob</span>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="#empleos" class="nav-link">Empleos</a></li>
+          <li><a href="#como-funciona" class="nav-link">Cómo funciona</a></li>
+          <li><a href="#empresas" class="nav-link">Empresas</a></li>
+          <li><a href="#newsletter" class="nav-link">Newsletter</a></li>
+        </ul>
+      </nav>
+
+      <a href="publicar-oferta.html" class="btn btn-primary nav-cta">Publicar oferta</a>
+
+      <button type="button" class="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-mobile">
+        <span class="burger-bar"></span>
+        <span class="burger-bar"></span>
+        <span class="burger-bar"></span>
+      </button>
+    </div>
+
+    <!-- Mobile nav -->
+    <div class="nav-mobile" id="nav-mobile" hidden aria-label="Menú móvil">
+      <ul role="list">
+        <li><a href="#empleos" class="nav-link">Empleos</a></li>
+        <li><a href="#como-funciona" class="nav-link">Cómo funciona</a></li>
+        <li><a href="#empresas" class="nav-link">Empresas</a></li>
+        <li><a href="#newsletter" class="nav-link">Newsletter</a></li>
+      </ul>
+      <a href="publicar-oferta.html" class="btn btn-primary">Publicar oferta</a>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ═══════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-mesh" aria-hidden="true"></div>
+      <div class="hero-grain" aria-hidden="true"></div>
+      <div class="hero-img-wrap" aria-hidden="true">
+        <img src="assets/img/hero.webp" alt="" class="hero-img" fetchpriority="high" loading="eager">
+        <div class="hero-img-overlay"></div>
+      </div>
+
+      <div class="hero-inner">
+        <p class="hero-kicker reveal">
+          <span class="kicker-dot" aria-hidden="true"></span>
+          Portal de empleo inclusivo · Acceso gratuito para candidatos
+        </p>
+
+        <h1 id="hero-title" class="hero-title reveal">
+          Tu talento<br><em>no tiene límites.</em>
+        </h1>
+
+        <p class="hero-sub reveal">
+          Encuentra empleo adaptado a tu perfil de discapacidad en España. Ofertas presenciales, remotas e híbridas verificadas por nuestro equipo.
+        </p>
+
+        <!-- Search -->
+        <form class="hero-search reveal" role="search" aria-label="Buscar empleos" id="hero-form">
+          <div class="search-field">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <label for="search-city" class="sr-only">Ciudad</label>
+            <select id="search-city" name="city" class="search-select">
+              <option value="">Cualquier ciudad</option>
+              <option>Madrid</option>
+              <option>Barcelona</option>
+              <option>Valencia</option>
+              <option>Sevilla</option>
+              <option>Zaragoza</option>
+              <option>Málaga</option>
+              <option>Murcia</option>
+              <option>Palma</option>
+              <option>Bilbao</option>
+              <option>Alicante</option>
+              <option>A Coruña</option>
+              <option>Remoto</option>
+            </select>
+          </div>
+
+          <div class="search-divider" aria-hidden="true"></div>
+
+          <div class="search-field">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </span>
+            <label for="search-disability" class="sr-only">Perfil de discapacidad</label>
+            <select id="search-disability" name="disability" class="search-select">
+              <option value="">Todos los perfiles</option>
+              <option value="física">Discapacidad física</option>
+              <option value="visual">Discapacidad visual</option>
+              <option value="auditiva">Discapacidad auditiva</option>
+              <option value="intelectual">Discapacidad intelectual</option>
+              <option value="múltiple">Discapacidad múltiple</option>
+            </select>
+          </div>
+
+          <div class="search-divider" aria-hidden="true"></div>
+
+          <div class="search-field search-field--grow">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </span>
+            <label for="search-q" class="sr-only">Puesto o empresa</label>
+            <input id="search-q" type="search" name="q" class="search-input" placeholder="Puesto, empresa, sector…" autocomplete="off" spellcheck="false">
+          </div>
+
+          <button type="submit" class="btn btn-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Buscar
+          </button>
+        </form>
+
+        <div class="hero-tags reveal" aria-label="Búsquedas populares">
+          <span class="hero-tags-label" aria-hidden="true">Popular:</span>
+          <button type="button" class="hero-tag" data-filter="remoto">Remoto</button>
+          <button type="button" class="hero-tag" data-filter="tecnología">Tecnología</button>
+          <button type="button" class="hero-tag" data-filter="administración">Administración</button>
+          <button type="button" class="hero-tag" data-filter="indefinido">Contrato indefinido</button>
+        </div>
+      </div>
+
+      <div class="hero-scroll-hint" aria-hidden="true">
+        <div class="scroll-mouse">
+          <div class="scroll-dot"></div>
+        </div>
+        <span>Desplázate</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FILTERS + JOBS
+    ═══════════════════════════════════════════ -->
+    <section id="empleos" class="jobs-section" aria-labelledby="jobs-title">
+      <div class="container">
+        <div class="jobs-header">
+          <h2 id="jobs-title" class="section-title reveal">Ofertas disponibles</h2>
+          <p class="section-sub reveal">Revisadas por nuestro equipo. Aplica directamente desde aquí.</p>
+        </div>
+
+        <!-- Filters bar -->
+        <div class="filters-bar reveal" role="group" aria-label="Filtros de búsqueda">
+          <div class="filter-group">
+            <label for="filter-modality" class="filter-label">Modalidad</label>
+            <select id="filter-modality" class="filter-select" aria-label="Filtrar por modalidad">
+              <option value="">Todas</option>
+              <option value="remoto">Remoto</option>
+              <option value="presencial">Presencial</option>
+              <option value="híbrido">Híbrido</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-contract" class="filter-label">Contrato</label>
+            <select id="filter-contract" class="filter-select" aria-label="Filtrar por tipo de contrato">
+              <option value="">Todos</option>
+              <option value="Indefinido">Indefinido</option>
+              <option value="Temporal">Temporal</option>
+              <option value="Prácticas">Prácticas</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-oficio" class="filter-label">Oficio</label>
+            <select id="filter-oficio" class="filter-select" aria-label="Filtrar por tipo de oficio">
+              <option value="">Todos los oficios</option>
+              <optgroup label="Oficina y administración">
+                <option value="recepcionista">Recepcionista</option>
+                <option value="administrativo">Administrativo/a</option>
+                <option value="recursos humanos">Recursos humanos</option>
+                <option value="contabilidad">Contabilidad / Finanzas</option>
+                <option value="atención al cliente">Atención al cliente</option>
+                <option value="teleoperador">Teleoperador/a</option>
+              </optgroup>
+              <optgroup label="Tecnología">
+                <option value="informática">Informática / Soporte IT</option>
+                <option value="análisis">Análisis de datos</option>
+                <option value="diseño">Diseño gráfico / UX</option>
+                <option value="marketing">Marketing digital</option>
+                <option value="fotografía">Fotografía / Vídeo</option>
+              </optgroup>
+              <optgroup label="Comercio y hostelería">
+                <option value="dependiente">Dependiente/a</option>
+                <option value="cajero">Cajero/a</option>
+                <option value="hostelería">Hostelería / Camarero/a</option>
+                <option value="cocina">Cocina / Ayudante cocina</option>
+                <option value="reponedor">Reponedor/a</option>
+              </optgroup>
+              <optgroup label="Logística y mantenimiento">
+                <option value="almacén">Almacén / Logística</option>
+                <option value="mantenimiento">Mantenimiento</option>
+                <option value="electricista">Electricista</option>
+                <option value="fontanero">Fontanero/a</option>
+                <option value="pintor">Pintor/a</option>
+                <option value="jardinería">Jardinero/a</option>
+                <option value="limpieza">Limpieza / Conserje</option>
+                <option value="conductor">Conductor/a / Repartidor</option>
+              </optgroup>
+              <optgroup label="Sanidad y cuidados">
+                <option value="auxiliar sanitario">Auxiliar sanitario/a</option>
+                <option value="cuidador">Cuidador/a</option>
+                <option value="farmacia">Farmacia</option>
+              </optgroup>
+              <optgroup label="Otros">
+                <option value="seguridad">Vigilante de seguridad</option>
+                <option value="traducción">Traducción / Idiomas</option>
+                <option value="educación">Monitor/a / Educador/a</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-disability" class="filter-label">Perfil</label>
+            <select id="filter-disability" class="filter-select" aria-label="Filtrar por tipo de discapacidad">
+              <option value="">Todos</option>
+              <option value="física">Física</option>
+              <option value="visual">Visual</option>
+              <option value="auditiva">Auditiva</option>
+              <option value="intelectual">Intelectual</option>
+              <option value="múltiple">Múltiple</option>
+            </select>
+          </div>
+          <div class="filter-results" aria-live="polite" aria-atomic="true">
+            <span data-results-count>12</span> ofertas
+            <button type="button" class="btn-reset-inline" id="reset-filters" data-reset-filters hidden aria-label="Limpiar todos los filtros activos">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+
+        <!-- Job cards grid -->
+        <div class="jobs-grid" data-jobs role="list" aria-label="Lista de ofertas de empleo">
+
+          <!-- j-001 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-001" data-city="madrid" data-modality="híbrido" data-contract="Indefinido" data-oficio="informática" data-disabilities="física auditiva">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#0066cc">TF</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--hibrido">Híbrido</span>
+                <span class="job-date"><time datetime="2026-05-17">17 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Técnico/a de Soporte IT</h3>
+            <p class="job-company">Telefónica</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Madrid</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">22.000 – 26.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-001" aria-label="Ver detalles de Técnico/a de Soporte IT en Telefónica">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-001" aria-label="Enviar currículum para Técnico/a de Soporte IT">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-002 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-002" data-city="barcelona" data-modality="presencial" data-contract="Indefinido" data-oficio="administrativo" data-disabilities="física visual auditiva">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#004a97">BB</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--presencial">Presencial</span>
+                <span class="job-date"><time datetime="2026-05-16">16 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Auxiliar Administrativo/a</h3>
+            <p class="job-company">BBVA</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Barcelona</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">19.000 – 22.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad visual">👁️</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-002" aria-label="Ver detalles de Auxiliar Administrativo/a en BBVA">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-002" aria-label="Enviar currículum para Auxiliar Administrativo/a">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-003 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-003" data-city="remoto" data-modality="remoto" data-contract="Indefinido" data-oficio="informática" data-disabilities="física visual intelectual">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#e30016">IN</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--remoto">Remoto</span>
+                <span class="job-date"><time datetime="2026-05-15">15 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Desarrollador/a Web Frontend</h3>
+            <p class="job-company">Indra</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Remoto</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">28.000 – 36.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad visual">👁️</span>
+              <span class="disability-badge" title="Discapacidad intelectual">🧠</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-003" aria-label="Ver detalles de Desarrollador/a Web Frontend en Indra">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-003" aria-label="Enviar currículum para Desarrollador/a Web Frontend">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-004 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-004" data-city="madrid" data-modality="híbrido" data-contract="Temporal" data-oficio="atención al cliente" data-disabilities="física auditiva múltiple">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#ff9900">AM</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--hibrido">Híbrido</span>
+                <span class="job-date"><time datetime="2026-05-14">14 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Agente de Atención al Cliente</h3>
+            <p class="job-company">Amazon</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Madrid</span>
+              <span class="job-contract">Temporal</span>
+              <span class="job-salary">17.000 – 19.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+              <span class="disability-badge" title="Discapacidad múltiple">⭐</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-004" aria-label="Ver detalles de Agente de Atención al Cliente en Amazon">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-004" aria-label="Enviar currículum para Agente de Atención al Cliente">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-005 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-005" data-city="barcelona" data-modality="híbrido" data-contract="Indefinido" data-oficio="diseño" data-disabilities="física auditiva">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#6d2a7a">HC</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--hibrido">Híbrido</span>
+                <span class="job-date"><time datetime="2026-05-13">13 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Diseñador/a Gráfico/a</h3>
+            <p class="job-company">Havas Creative</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Barcelona</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">23.000 – 29.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-005" aria-label="Ver detalles de Diseñador/a Gráfico/a en Havas Creative">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-005" aria-label="Enviar currículum para Diseñador/a Gráfico/a">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-006 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-006" data-city="valencia" data-modality="presencial" data-contract="Indefinido" data-oficio="almacén" data-disabilities="auditiva intelectual">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#009a44">MC</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--presencial">Presencial</span>
+                <span class="job-date"><time datetime="2026-05-12">12 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Operario/a de Almacén</h3>
+            <p class="job-company">Mercadona</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Valencia</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">18.500 – 21.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+              <span class="disability-badge" title="Discapacidad intelectual">🧠</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-006" aria-label="Ver detalles de Operario/a de Almacén en Mercadona">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-006" aria-label="Enviar currículum para Operario/a de Almacén">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-007 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-007" data-city="remoto" data-modality="remoto" data-contract="Temporal" data-oficio="marketing" data-disabilities="física visual múltiple">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#1da1f2">SN</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--remoto">Remoto</span>
+                <span class="job-date"><time datetime="2026-05-11">11 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Community Manager</h3>
+            <p class="job-company">Social Now</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Remoto</span>
+              <span class="job-contract">Temporal</span>
+              <span class="job-salary">16.000 – 20.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad visual">👁️</span>
+              <span class="disability-badge" title="Discapacidad múltiple">⭐</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-007" aria-label="Ver detalles de Community Manager en Social Now">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-007" aria-label="Enviar currículum para Community Manager">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-008 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-008" data-city="sevilla" data-modality="presencial" data-contract="Indefinido" data-oficio="recepcionista" data-disabilities="física auditiva">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#c8902a">NH</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--presencial">Presencial</span>
+                <span class="job-date"><time datetime="2026-05-10">10 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Recepcionista de Hotel</h3>
+            <p class="job-company">NH Collection</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Sevilla</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">18.000 – 21.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-008" aria-label="Ver detalles de Recepcionista en NH Collection">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-008" aria-label="Enviar currículum para Recepcionista">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-009 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-009" data-city="madrid" data-modality="híbrido" data-contract="Indefinido" data-oficio="análisis" data-disabilities="física visual">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#86bc25">DL</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--hibrido">Híbrido</span>
+                <span class="job-date"><time datetime="2026-05-09">9 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Analista de Datos</h3>
+            <p class="job-company">Deloitte</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Madrid</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">32.000 – 42.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad visual">👁️</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-009" aria-label="Ver detalles de Analista de Datos en Deloitte">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-009" aria-label="Enviar currículum para Analista de Datos">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-010 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-010" data-city="madrid" data-modality="presencial" data-contract="Temporal" data-oficio="administrativo" data-disabilities="física auditiva intelectual">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#c01818">CM</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--presencial">Presencial</span>
+                <span class="job-date"><time datetime="2026-05-08">8 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Auxiliar de Biblioteca</h3>
+            <p class="job-company">Comunidad de Madrid</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Madrid</span>
+              <span class="job-contract">Temporal</span>
+              <span class="job-salary">16.500 – 18.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+              <span class="disability-badge" title="Discapacidad intelectual">🧠</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-010" aria-label="Ver detalles de Auxiliar de Biblioteca">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-010" aria-label="Enviar currículum para Auxiliar de Biblioteca">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-011 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-011" data-city="a coruña" data-modality="híbrido" data-contract="Indefinido" data-oficio="recursos humanos" data-disabilities="física auditiva">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#212121">IT</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--hibrido">Híbrido</span>
+                <span class="job-date"><time datetime="2026-05-07">7 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Técnico/a de RR.HH.</h3>
+            <p class="job-company">Inditex</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> A Coruña</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">24.000 – 29.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad física">♿</span>
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-011" aria-label="Ver detalles de Técnico/a de RR.HH. en Inditex">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-011" aria-label="Enviar currículum para Técnico/a de RR.HH.">Enviar CV</button>
+            </div>
+          </article>
+
+          <!-- j-012 -->
+          <article class="job-card reveal" role="listitem" data-job-id="j-012" data-city="valencia" data-modality="presencial" data-contract="Indefinido" data-oficio="mantenimiento" data-disabilities="auditiva intelectual">
+            <div class="job-card-top">
+              <div class="job-logo" aria-hidden="true" style="--logo-color:#e10015">RF</div>
+              <div class="job-meta-top">
+                <span class="job-modality job-modality--presencial">Presencial</span>
+                <span class="job-date"><time datetime="2026-05-06">6 may 2026</time></span>
+              </div>
+            </div>
+            <h3 class="job-title">Técnico/a de Mantenimiento</h3>
+            <p class="job-company">RENFE</p>
+            <div class="job-info">
+              <span class="job-city"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Valencia</span>
+              <span class="job-contract">Indefinido</span>
+              <span class="job-salary">21.000 – 25.000 €/año</span>
+            </div>
+            <div class="job-disabilities" aria-label="Compatible con discapacidad">
+              <span class="disability-badge" title="Discapacidad auditiva">👂</span>
+              <span class="disability-badge" title="Discapacidad intelectual">🧠</span>
+            </div>
+            <div class="job-actions">
+              <button type="button" class="btn btn-detail" data-open-modal="j-012" aria-label="Ver detalles de Técnico/a de Mantenimiento en RENFE">Ver detalles</button>
+              <button type="button" class="btn btn-apply" data-open-modal="j-012" aria-label="Enviar currículum para Técnico/a de Mantenimiento">Enviar CV</button>
+            </div>
+          </article>
+
+        </div><!-- /jobs-grid -->
+
+        <div class="jobs-empty" id="jobs-empty" hidden role="alert" aria-live="polite">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          <p>No hay ofertas con estos filtros.</p>
+          <button type="button" class="btn btn-outline" data-reset-filters>Limpiar filtros</button>
+        </div>
+
+        <div class="jobs-load-more" id="jobs-load-more">
+          <p class="jobs-load-hint">Mostrando 6 de 12 ofertas</p>
+          <button type="button" class="btn btn-outline" aria-label="Cargar más ofertas de empleo">
+            Ver más ofertas
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         HOW IT WORKS
+    ═══════════════════════════════════════════ -->
+    <section id="como-funciona" class="how-section" aria-labelledby="how-title">
+      <div class="container">
+        <div class="how-header">
+          <p class="section-eyebrow reveal">Simple y rápido</p>
+          <h2 id="how-title" class="section-title reveal">Cómo funciona</h2>
+          <p class="section-sub reveal">En tres pasos conectamos tu perfil con el empleo que mereces</p>
+        </div>
+
+        <ol class="steps-list" aria-label="Pasos para encontrar empleo">
+          <li class="step reveal">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <div class="step-number">01</div>
+              <div class="step-icon">
+                <svg width="32" height="32" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+            </div>
+            <div class="step-content">
+              <h3>Crea tu perfil</h3>
+              <p>Regístrate gratuitamente en menos de 2 minutos. Completa tu experiencia, habilidades e indica tu tipo de discapacidad (siempre opcional y confidencial).</p>
+            </div>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <div class="step-number">02</div>
+              <div class="step-icon">
+                <svg width="32" height="32" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              </div>
+            </div>
+            <div class="step-content">
+              <h3>Busca tu empleo</h3>
+              <p>Filtra por ciudad, sector y modalidad de trabajo. Nuestro bot rastreador actualiza las ofertas cada hora desde más de 800 fuentes de empleo en España.</p>
+            </div>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <div class="step-number">03</div>
+              <div class="step-icon">
+                <svg width="32" height="32" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+              </div>
+            </div>
+            <div class="step-content">
+              <h3>Aplica en un clic</h3>
+              <p>Envía tu candidatura directamente desde IncluJob. Las empresas comprometidas con la inclusión recibirán tu perfil de forma inmediata.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         STATS
+    ═══════════════════════════════════════════ -->
+    <section class="stats-section" aria-labelledby="stats-heading">
+      <div class="stats-mesh" aria-hidden="true"></div>
+      <div class="container">
+        <h2 id="stats-heading" class="sr-only">Nuestras cifras</h2>
+        <dl class="stats-grid">
+          <div class="stat reveal">
+            <dt class="stat-label">Ofertas activas</dt>
+            <dd class="stat-number">
+              <span data-count-to="12" aria-label="12 ofertas activas">0</span>
+            </dd>
+          </div>
+          <div class="stat reveal">
+            <dt class="stat-label">Acceso para candidatos</dt>
+            <dd class="stat-number" aria-label="Acceso gratuito">
+              <span style="font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.01em">Gratis</span>
+            </dd>
+          </div>
+          <div class="stat reveal">
+            <dt class="stat-label">Revisamos cada oferta en</dt>
+            <dd class="stat-number" aria-label="Plazo de revisión 48 horas">
+              <span style="font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.01em">48 h</span>
+            </dd>
+          </div>
+        </dl>
+        <p class="stats-note reveal">Portal en lanzamiento · <span class="stats-live" aria-label="Activo">● Activo</span></p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         COMPANIES
+    ═══════════════════════════════════════════ -->
+    <section id="empresas" class="companies-section" aria-labelledby="companies-title">
+      <div class="container">
+        <div class="companies-header">
+          <p class="section-eyebrow reveal">Comprometidas con la inclusión</p>
+          <h2 id="companies-title" class="section-title reveal">Empresas que confían en el talento sin límites</h2>
+          <p class="section-sub reveal">Estas empresas apuestan activamente por la inclusión laboral. ¿La tuya quiere sumarse?</p>
+        </div>
+
+        <div class="companies-grid reveal" aria-label="Empresas inclusivas colaboradoras">
+          <div class="company-badge" title="Telefónica">
+            <div class="company-logo" style="background:#0066cc" aria-hidden="true">TF</div>
+            <span class="company-name">Telefónica</span>
+          </div>
+          <div class="company-badge" title="BBVA">
+            <div class="company-logo" style="background:#004a97" aria-hidden="true">BB</div>
+            <span class="company-name">BBVA</span>
+          </div>
+          <div class="company-badge" title="Amazon">
+            <div class="company-logo" style="background:#ff9900" aria-hidden="true">AM</div>
+            <span class="company-name">Amazon</span>
+          </div>
+          <div class="company-badge" title="Mercadona">
+            <div class="company-logo" style="background:#009a44" aria-hidden="true">MC</div>
+            <span class="company-name">Mercadona</span>
+          </div>
+          <div class="company-badge" title="Deloitte">
+            <div class="company-logo" style="background:#86bc25" aria-hidden="true">DL</div>
+            <span class="company-name">Deloitte</span>
+          </div>
+          <div class="company-badge" title="RENFE">
+            <div class="company-logo" style="background:#e10015" aria-hidden="true">RF</div>
+            <span class="company-name">RENFE</span>
+          </div>
+          <div class="company-badge" title="Inditex">
+            <div class="company-logo" style="background:#212121" aria-hidden="true">IT</div>
+            <span class="company-name">Inditex</span>
+          </div>
+          <div class="company-badge" title="NH Hotels">
+            <div class="company-logo" style="background:#c8902a" aria-hidden="true">NH</div>
+            <span class="company-name">NH Hotels</span>
+          </div>
+          <div class="company-badge" title="Indra">
+            <div class="company-logo" style="background:#e30016" aria-hidden="true">IN</div>
+            <span class="company-name">Indra</span>
+          </div>
+          <div class="company-badge" title="El Corte Inglés">
+            <div class="company-logo" style="background:#006400" aria-hidden="true">ECI</div>
+            <span class="company-name">El Corte Inglés</span>
+          </div>
+          <div class="company-badge" title="Mapfre">
+            <div class="company-logo" style="background:#c62828" aria-hidden="true">MF</div>
+            <span class="company-name">Mapfre</span>
+          </div>
+          <div class="company-badge" title="Acciona">
+            <div class="company-logo" style="background:#00a651" aria-hidden="true">AC</div>
+            <span class="company-name">Acciona</span>
+          </div>
+        </div>
+
+        <div class="companies-cta reveal">
+          <p>¿Tu empresa quiere sumarse?</p>
+          <a href="publicar-oferta.html" class="btn btn-outline-blue">Publicar oferta inclusiva →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         NEWSLETTER
+    ═══════════════════════════════════════════ -->
+    <section id="newsletter" class="newsletter-section" aria-labelledby="newsletter-title">
+      <div class="newsletter-mesh" aria-hidden="true"></div>
+      <div class="container">
+        <div class="newsletter-inner reveal">
+          <div class="newsletter-text">
+            <p class="section-eyebrow" style="color:rgba(255,255,255,0.7)">Sin spam, siempre gratuito</p>
+            <h2 id="newsletter-title">Recibe ofertas adaptadas a tu perfil</h2>
+            <p>Te enviamos las mejores ofertas de tu ciudad cada semana. Puedes cancelar en cualquier momento.</p>
+            <ul class="newsletter-benefits" aria-label="Beneficios de suscribirse">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Ofertas filtradas por tu tipo de discapacidad
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Alertas instantáneas de nuevas ofertas
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Consejos de empleabilidad e inclusión
+              </li>
+            </ul>
+          </div>
+
+          <form class="newsletter-form" aria-label="Formulario de suscripción al newsletter" novalidate>
+            <div class="form-group">
+              <label for="nl-name">Nombre</label>
+              <input type="text" id="nl-name" name="name" placeholder="Tu nombre" autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label for="nl-email">Email <span aria-hidden="true">*</span></label>
+              <input type="email" id="nl-email" name="email" placeholder="tu@email.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="nl-city">Ciudad</label>
+              <select id="nl-city" name="city" autocomplete="address-level2">
+                <option value="">Selecciona tu ciudad</option>
+                <option>Madrid</option>
+                <option>Barcelona</option>
+                <option>Valencia</option>
+                <option>Sevilla</option>
+                <option>Zaragoza</option>
+                <option>Málaga</option>
+                <option>Bilbao</option>
+                <option>Otras</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="nl-disability">Perfil de discapacidad (opcional)</label>
+              <select id="nl-disability" name="disability" autocomplete="off">
+                <option value="">Prefiero no indicarlo</option>
+                <option value="física">Discapacidad física</option>
+                <option value="visual">Discapacidad visual</option>
+                <option value="auditiva">Discapacidad auditiva</option>
+                <option value="intelectual">Discapacidad intelectual</option>
+                <option value="múltiple">Discapacidad múltiple</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-nl-submit">
+              <span class="btn-text">Suscribirme gratis</span>
+              <span class="btn-loading" hidden aria-label="Procesando…">
+                <svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".25"/><path d="M21 12a9 9 0 00-9-9"/></svg>
+              </span>
+              <span class="btn-success" hidden>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                ¡Suscrito!
+              </span>
+            </button>
+            <p class="form-privacy">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Tus datos están protegidos. Nunca los compartimos.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" aria-label="IncluJob inicio">
+            <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2ecc71"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#0f2348" font-family="sans-serif" font-weight="800">IJ</text></svg>
+            <span style="color:#fff">IncluJob</span>
+          </a>
+          <p class="footer-tagline">El empleo inclusivo empieza aquí.</p>
+          <p class="footer-bot-note">
+            <span class="bot-live-dot" aria-hidden="true"></span>
+            Bot de búsqueda activo
+          </p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Navegación del pie de página">
+          <div class="footer-col">
+            <h3>Portal</h3>
+            <ul role="list">
+              <li><a href="#empleos">Buscar empleo</a></li>
+              <li><a href="#como-funciona">Cómo funciona</a></li>
+              <li><a href="#empresas">Empresas inclusivas</a></li>
+              <li><a href="#newsletter">Newsletter</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Recursos</h3>
+            <ul role="list">
+              <li><a href="derechos-laborales.html">Guía de derechos laborales</a></li>
+              <li><a href="certificado-discapacidad.html">Certificado de discapacidad</a></li>
+              <li><a href="ayudas-empleo.html">Ayudas al empleo</a></li>
+              <li><a href="blog.html">Blog de inclusión</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Contacto</h3>
+            <ul role="list">
+              <li><a href="mailto:hola@inclujob.es">hola@inclujob.es</a></li>
+              <li><a href="tel:+34900123456">900 123 456</a></li>
+              <li><a href="aviso-legal.html">Aviso legal</a></li>
+              <li><a href="privacidad.html">Política de privacidad</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 IncluJob. Todos los derechos reservados.</p>
+        <p class="footer-a11y">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Sitio accesible WCAG 2.1 nivel AA
+        </p>
+        <p class="footer-credits">
+          Imágenes: <a href="assets/credits.json" target="_blank" rel="noopener">Openverse</a> (licencias CC)
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       JOB DETAIL MODAL
+  ═══════════════════════════════════════════ -->
+  <dialog class="job-modal" id="job-modal" aria-labelledby="modal-job-title" aria-modal="true">
+    <div class="modal-inner">
+      <button type="button" id="modal-close" class="modal-close" aria-label="Cerrar modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="modal-content">
+        <!-- Left: job info -->
+        <div class="modal-info">
+          <div class="modal-header">
+            <div class="job-logo modal-logo" id="modal-logo" aria-hidden="true">??</div>
+            <div>
+              <h2 id="modal-job-title" class="modal-title" tabindex="-1">Título del puesto</h2>
+              <p id="modal-company" class="modal-company">Empresa</p>
+            </div>
+          </div>
+
+          <dl class="modal-meta">
+            <div><dt>Ciudad</dt><dd id="modal-city">—</dd></div>
+            <div><dt>Modalidad</dt><dd id="modal-modality">—</dd></div>
+            <div><dt>Contrato</dt><dd id="modal-contract">—</dd></div>
+            <div><dt>Salario</dt><dd id="modal-salary">—</dd></div>
+          </dl>
+
+          <div class="modal-description">
+            <h3>Descripción del puesto</h3>
+            <p id="modal-description">—</p>
+          </div>
+
+          <div class="modal-requirements" id="modal-requirements-wrap">
+            <h3>Requisitos</h3>
+            <ul id="modal-requirements" aria-label="Requisitos del puesto"></ul>
+          </div>
+
+          <div class="modal-benefits" id="modal-benefits-wrap">
+            <h3>Beneficios</h3>
+            <ul id="modal-benefits" aria-label="Beneficios del puesto"></ul>
+          </div>
+        </div>
+
+        <!-- Right: apply form -->
+        <div class="modal-apply">
+          <h3 class="apply-title">Enviar candidatura</h3>
+          <p class="apply-sub">Tu información será enviada directamente a la empresa.</p>
+
+          <form class="apply-form" id="apply-form" novalidate>
+            <div class="form-group">
+              <label for="apply-name">Nombre completo <span aria-hidden="true">*</span></label>
+              <input type="text" id="apply-name" name="name" required autocomplete="name" placeholder="María García López">
+            </div>
+            <div class="form-group">
+              <label for="apply-email">Email <span aria-hidden="true">*</span></label>
+              <input type="email" id="apply-email" name="email" required autocomplete="email" placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+              <label for="apply-phone">Teléfono</label>
+              <input type="tel" id="apply-phone" name="phone" autocomplete="tel" placeholder="+34 612 345 678" pattern="[0-9+\s\-\(\)]{6,20}" title="Introduce un número de teléfono válido">
+            </div>
+            <div class="form-group">
+              <label for="apply-disability">Tipo de discapacidad (opcional)</label>
+              <select id="apply-disability" name="disability" autocomplete="off">
+                <option value="">Prefiero no indicarlo</option>
+                <option value="física">Discapacidad física</option>
+                <option value="visual">Discapacidad visual</option>
+                <option value="auditiva">Discapacidad auditiva</option>
+                <option value="intelectual">Discapacidad intelectual</option>
+                <option value="múltiple">Discapacidad múltiple</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="apply-cv">Currículum (PDF, DOC)</label>
+              <div class="file-upload" id="file-upload-area">
+                <input type="file" id="apply-cv" name="cv" accept=".pdf,.doc,.docx" aria-describedby="cv-hint" autocomplete="off">
+                <div class="file-upload-inner">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span id="cv-hint">Arrastra tu CV aquí o <strong>haz clic</strong></span>
+                  <span class="file-types">PDF, DOC o DOCX · Máx. 5 MB</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="apply-message">Carta de presentación (opcional)</label>
+              <textarea id="apply-message" name="message" rows="4" maxlength="1000" placeholder="Cuéntanos por qué eres la persona ideal para este puesto…" autocomplete="off"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-apply-submit" id="apply-submit">
+              <span class="btn-text">Enviar candidatura</span>
+              <span class="btn-loading" hidden aria-label="Enviando…">
+                <svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".25"/><path d="M21 12a9 9 0 00-9-9"/></svg>
+              </span>
+            </button>
+
+            <div class="apply-success" id="apply-success" hidden role="alert" aria-live="polite">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <h4>¡Candidatura enviada!</h4>
+              <p>La empresa recibirá tu perfil en breve. Te avisaremos por email.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Bot widget -->
+  <div class="bot-widget" role="complementary" aria-label="Asistente IncluBot">
+    <div class="bot-panel" id="bot-panel" hidden>
+      <div class="bot-panel-header">
+        <div class="bot-avatar" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a2 2 0 012 2v1h2a3 3 0 013 3v1a1 1 0 011 1v2a1 1 0 01-1 1v1a3 3 0 01-3 3H8a3 3 0 01-3-3v-1a1 1 0 01-1-1V9a1 1 0 011-1V7a3 3 0 013-3h2V4a2 2 0 012-2zm0 2v1H8a1 1 0 00-1 1v1h10V6a1 1 0 00-1-1h-4zm-4 5a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
+        </div>
+        <div class="bot-header-info">
+          <strong>IncluBot</strong>
+          <span class="bot-status">
+            <span class="bot-live-dot" aria-hidden="true"></span>
+            Buscando ofertas ahora
+          </span>
+        </div>
+        <button type="button" class="bot-close" aria-label="Cerrar chat del asistente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="bot-messages" aria-live="polite">
+        <div class="bot-msg">
+          ¡Hola! Soy <strong>IncluBot</strong>. Busco ofertas de empleo adaptadas a personas con discapacidad <strong>las 24 horas</strong>, los 7 días de la semana. 🤖
+        </div>
+        <div class="bot-msg bot-msg--delay">
+          ¿En qué ciudad de España buscas trabajo?
+        </div>
+        <div class="bot-quick-replies" role="group" aria-label="Respuestas rápidas">
+          <button type="button" class="bot-quick" data-city="madrid">📍 Madrid</button>
+          <button type="button" class="bot-quick" data-city="barcelona">📍 Barcelona</button>
+          <button type="button" class="bot-quick" data-city="remoto">🌐 Remoto</button>
+          <button type="button" class="bot-quick" data-city="otra">Otra ciudad</button>
+        </div>
+        <div class="bot-msg bot-msg--delay" style="margin-top:.75rem;font-weight:600;font-size:.82rem;">Últimas ofertas disponibles:</div>
+        <div class="bot-jobs-list" aria-live="polite" aria-label="Ofertas recientes"></div>
+      </div>
+    </div>
+
+    <button type="button" class="bot-toggle" id="bot-toggle" aria-expanded="false" aria-controls="bot-panel" aria-label="Abrir asistente de empleo IncluBot">
+      <div class="bot-toggle-pulse" aria-hidden="true"></div>
+      <svg class="bot-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a2 2 0 012 2v1h2a3 3 0 013 3v1a1 1 0 011 1v2a1 1 0 01-1 1v1a3 3 0 01-3 3H8a3 3 0 01-3-3v-1a1 1 0 01-1-1V9a1 1 0 011-1V7a3 3 0 013-3h2V4a2 2 0 012-2zm0 2v1H8a1 1 0 00-1 1v1h10V6a1 1 0 00-1-1h-4zm-4 5a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
+      <svg class="bot-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" hidden aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="bot-badge" aria-hidden="true">1</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script defer src="lib/gsap.min.js?v=20260519"></script>
+  <script defer src="lib/ScrollTrigger.min.js?v=20260519"></script>
+  <script defer src="lib/manifest.js?v=20260519"></script>
+  <script defer src="main.js?v=20260519"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicar Oferta de Empleo Inclusivo — IncluJob</title>
+  <meta name="description" content="Publica tu oferta de empleo en IncluJob y llega a miles de candidatos con discapacidad. Gratuito durante el lanzamiento.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css?v=20260520">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a3a6b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%232ecc71' font-family='sans-serif' font-weight='bold'>IJ</text></svg>">
+  <style>
+    /* ── Publicar oferta page ── */
+    .offer-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2.5rem;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    @media (max-width: 860px) {
+      .offer-layout { grid-template-columns: 1fr; }
+      .offer-sidebar { order: -1; }
+    }
+
+    /* Form card */
+    .offer-form-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 2rem 2rem 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .offer-form-card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+      border-bottom: 2px solid var(--blue-pale);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .offer-form-card h2 .section-num {
+      width: 24px; height: 24px;
+      background: var(--blue-deep);
+      color: #fff;
+      border-radius: 50%;
+      font-size: .75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .offer-form-card + .offer-form-card { margin-top: 1.5rem; }
+
+    /* Form groups */
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: .35rem;
+    }
+    .form-group label .req { color: var(--blue-mid); margin-left: 2px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: .65rem .9rem;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      font: inherit;
+      font-size: .9rem;
+      color: var(--ink);
+      background: var(--white);
+      transition: border-color .18s, box-shadow .18s;
+      appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px rgba(42,82,152,.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23718096' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .85rem center;
+      padding-right: 2.2rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* Checkboxes */
+    .check-group { display: flex; flex-direction: column; gap: .5rem; margin-top: .2rem; }
+    .check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: .55rem;
+      font-size: .875rem;
+      color: var(--gray-700);
+      cursor: pointer;
+    }
+    .check-label input[type="checkbox"],
+    .check-label input[type="radio"] {
+      width: 17px; height: 17px;
+      border: 1.5px solid var(--gray-400);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--blue-mid);
+    }
+    .check-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .4rem .8rem;
+      margin-top: .3rem;
+    }
+    @media (max-width: 480px) { .check-grid { grid-template-columns: 1fr; } }
+
+    /* Hint text */
+    .form-hint { font-size: .78rem; color: var(--gray-500); margin-top: .3rem; }
+
+    /* Submit area */
+    .submit-area {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .submit-area .btn-submit {
+      width: 100%;
+      padding: .9rem 1.5rem;
+      background: var(--blue-deep);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background .18s, transform .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+    }
+    .submit-area .btn-submit:hover { background: var(--blue-mid); }
+    .submit-area .btn-submit:active { transform: scale(.98); }
+    .submit-area .btn-submit[aria-busy="true"] { opacity: .7; pointer-events: none; }
+    .submit-legal {
+      font-size: .75rem;
+      color: var(--gray-500);
+      text-align: center;
+      line-height: 1.55;
+    }
+    .submit-legal a { color: var(--blue-mid); text-decoration: underline; }
+
+    /* Success / Error states */
+    .form-success, .form-error {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      gap: 1rem;
+    }
+    .form-success.visible, .form-error.visible { display: flex; }
+    .form-success-icon {
+      width: 72px; height: 72px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-success-icon svg { color: var(--green-dark); }
+    .form-success h3 { font-size: 1.35rem; color: var(--ink); }
+    .form-success p { color: var(--gray-500); max-width: 380px; }
+    .form-error-icon {
+      width: 72px; height: 72px;
+      background: #fef2f2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-error h3 { font-size: 1.25rem; color: var(--ink); }
+    .form-error p { color: var(--gray-500); max-width: 380px; }
+    .form-error a { color: var(--blue-mid); text-decoration: underline; }
+
+    /* Sidebar */
+    .offer-sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+    .sidebar-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .sidebar-card h3 {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: .75rem;
+    }
+    .sidebar-card p { font-size: .875rem; color: var(--gray-500); line-height: 1.65; }
+    .sidebar-card ul { font-size: .875rem; color: var(--gray-500); padding-left: 1.1rem; }
+    .sidebar-card li { margin-bottom: .4rem; line-height: 1.55; }
+    .sidebar-card a { color: var(--blue-mid); text-decoration: underline; }
+    .sidebar-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border-radius: 100px;
+      font-size: .78rem;
+      font-weight: 700;
+      padding: .3rem .8rem;
+      margin-bottom: .6rem;
+    }
+    .sidebar-steps { display: flex; flex-direction: column; gap: .7rem; margin-top: .2rem; }
+    .sidebar-step {
+      display: flex;
+      gap: .7rem;
+      align-items: flex-start;
+    }
+    .sidebar-step-num {
+      width: 22px; height: 22px;
+      background: var(--blue-pale);
+      color: var(--blue-deep);
+      border-radius: 50%;
+      font-size: .72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .sidebar-step p { font-size: .83rem; color: var(--gray-700); margin: 0; }
+
+    /* Dark mode */
+    [data-theme="dark"] .offer-form-card,
+    [data-theme="dark"] .sidebar-card {
+      background: #1a2744;
+      border-color: #2a3f6a;
+    }
+    [data-theme="dark"] .offer-form-card h2 { border-color: #2a3f6a; color: #e2e8f0; }
+    [data-theme="dark"] .form-group label { color: #cbd5e0; }
+    [data-theme="dark"] .form-group input,
+    [data-theme="dark"] .form-group select,
+    [data-theme="dark"] .form-group textarea {
+      background: #0f1f3d;
+      border-color: #2a3f6a;
+      color: #e2e8f0;
+    }
+    [data-theme="dark"] .form-group input:focus,
+    [data-theme="dark"] .form-group select,
+    [data-theme="dark"] .form-group textarea:focus { border-color: #4e82f0; }
+    [data-theme="dark"] .check-label { color: #cbd5e0; }
+    [data-theme="dark"] .sidebar-card h3 { color: #e2e8f0; }
+    [data-theme="dark"] .sidebar-card p,
+    [data-theme="dark"] .sidebar-card li { color: #a0aec0; }
+    [data-theme="dark"] .sidebar-step p { color: #cbd5e0; }
+    [data-theme="dark"] .sidebar-step-num { background: #1a3a6b; color: #90c0f8; }
+    [data-theme="dark"] .form-success { background: transparent; }
+    [data-theme="dark"] .form-success h3 { color: #e2e8f0; }
+    [data-theme="dark"] .submit-legal { color: #718096; }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Ir al contenido principal</a>
+
+  <div class="a11y-toolbar" role="toolbar" aria-label="Herramientas de accesibilidad">
+    <button type="button" class="a11y-btn" data-a11y="font-dec" aria-label="Reducir tamaño de fuente" title="Reducir fuente">A−</button>
+    <button type="button" class="a11y-btn" data-a11y="font-inc" aria-label="Aumentar tamaño de fuente" title="Aumentar fuente">A+</button>
+    <button type="button" class="a11y-btn" data-a11y="contrast" aria-label="Activar alto contraste" title="Alto contraste" aria-pressed="false">◑</button>
+    <button type="button" class="a11y-btn" data-a11y="dark-mode" aria-label="Activar modo oscuro" title="Modo oscuro" aria-pressed="false">☾</button>
+  </div>
+
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="IncluJob — Ir a inicio">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="8" fill="#1a3a6b"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#2ecc71" font-family="sans-serif" font-weight="800">IJ</text></svg>
+        <span>IncluJob</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html#empleos" class="nav-link">Empleos</a></li>
+          <li><a href="index.html#como-funciona" class="nav-link">Cómo funciona</a></li>
+          <li><a href="index.html#empresas" class="nav-link">Empresas</a></li>
+          <li><a href="index.html#newsletter" class="nav-link">Newsletter</a></li>
+        </ul>
+      </nav>
+      <a href="publicar-oferta.html" class="btn btn-primary nav-cta" aria-current="page">Publicar oferta</a>
+      <button type="button" class="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-mobile">
+        <span class="burger-bar"></span><span class="burger-bar"></span><span class="burger-bar"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile" hidden aria-label="Menú móvil">
+      <ul role="list">
+        <li><a href="index.html#empleos" class="nav-link">Empleos</a></li>
+        <li><a href="index.html#como-funciona" class="nav-link">Cómo funciona</a></li>
+        <li><a href="index.html#empresas" class="nav-link">Empresas</a></li>
+        <li><a href="index.html#newsletter" class="nav-link">Newsletter</a></li>
+      </ul>
+      <a href="publicar-oferta.html" class="btn btn-primary">Publicar oferta</a>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <div class="page-header">
+      <div class="container">
+        <p class="page-eyebrow">Empresas</p>
+        <h1>Publicar una oferta</h1>
+        <p>Conecta con candidatos cualificados comprometidos con la inclusión</p>
+      </div>
+    </div>
+
+    <div class="offer-layout">
+
+      <!-- ── FORM ── -->
+      <div>
+        <!-- Form visible / success / error states -->
+        <div id="offer-form-wrap">
+
+          <form id="offer-form" novalidate>
+
+            <!-- 1. Datos de la empresa -->
+            <div class="offer-form-card">
+              <h2><span class="section-num" aria-hidden="true">1</span> Datos de la empresa</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="company-name">Nombre de la empresa <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="company-name" name="empresa" required autocomplete="organization" placeholder="Ej. Accenture">
+                </div>
+                <div class="form-group">
+                  <label for="company-sector">Sector</label>
+                  <select id="company-sector" name="sector">
+                    <option value="">Selecciona sector</option>
+                    <option>Tecnología e informática</option>
+                    <option>Atención al cliente</option>
+                    <option>Administración y oficina</option>
+                    <option>Logística y transporte</option>
+                    <option>Sanidad y servicios sociales</option>
+                    <option>Educación y formación</option>
+                    <option>Comercio y ventas</option>
+                    <option>Hostelería y turismo</option>
+                    <option>Industria y manufactura</option>
+                    <option>Construcción</option>
+                    <option>Comunicación y marketing</option>
+                    <option>Recursos humanos</option>
+                    <option>Finanzas y banca</option>
+                    <option>Otro</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="company-size">Tamaño de la empresa</label>
+                  <select id="company-size" name="tamaño_empresa">
+                    <option value="">Selecciona tamaño</option>
+                    <option>1–10 empleados</option>
+                    <option>11–49 empleados</option>
+                    <option>50–249 empleados</option>
+                    <option>250 o más empleados</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="company-web">Web de la empresa</label>
+                  <input type="url" id="company-web" name="web_empresa" placeholder="https://www.tuempresa.es" autocomplete="url">
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Contacto -->
+            <div class="offer-form-card">
+              <h2><span class="section-num" aria-hidden="true">2</span> Persona de contacto</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contact-name">Nombre y apellidos <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="contact-name" name="contacto_nombre" required autocomplete="name" placeholder="Ej. Laura García">
+                </div>
+                <div class="form-group">
+                  <label for="contact-email">Email de contacto <span class="req" aria-hidden="true">*</span></label>
+                  <input type="email" id="contact-email" name="contacto_email" required autocomplete="email" placeholder="rrhh@tuempresa.es">
+                </div>
+              </div>
+
+              <div class="form-group" style="max-width: 280px;">
+                <label for="contact-phone">Teléfono (opcional)</label>
+                <input type="tel" id="contact-phone" name="contacto_telefono" autocomplete="tel" placeholder="+34 600 000 000">
+              </div>
+            </div>
+
+            <!-- 3. Detalles de la oferta -->
+            <div class="offer-form-card">
+              <h2><span class="section-num" aria-hidden="true">3</span> Detalles de la oferta</h2>
+
+              <div class="form-group">
+                <label for="job-title">Título del puesto <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="job-title" name="puesto" required placeholder="Ej. Técnico/a de soporte informático">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="job-city">Ciudad <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="job-city" name="ciudad" required placeholder="Ej. Madrid">
+                </div>
+                <div class="form-group">
+                  <label for="job-modality">Modalidad <span class="req" aria-hidden="true">*</span></label>
+                  <select id="job-modality" name="modalidad" required>
+                    <option value="">Selecciona</option>
+                    <option>Presencial</option>
+                    <option>Remoto</option>
+                    <option>Híbrido</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="job-contract">Tipo de contrato <span class="req" aria-hidden="true">*</span></label>
+                  <select id="job-contract" name="tipo_contrato" required>
+                    <option value="">Selecciona</option>
+                    <option>Indefinido</option>
+                    <option>Temporal</option>
+                    <option>Prácticas / formación</option>
+                    <option>Autónomo / freelance</option>
+                    <option>Obra y servicio</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="job-schedule">Jornada</label>
+                  <select id="job-schedule" name="jornada">
+                    <option value="">Selecciona</option>
+                    <option>Completa</option>
+                    <option>Parcial</option>
+                    <option>Flexible / a convenir</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="job-salary">Salario anual bruto (opcional)</label>
+                  <input type="text" id="job-salary" name="salario" placeholder="Ej. 22.000 – 26.000 €">
+                </div>
+                <div class="form-group">
+                  <label for="job-start">Fecha de inicio prevista</label>
+                  <input type="date" id="job-start" name="fecha_inicio">
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Descripción -->
+            <div class="offer-form-card">
+              <h2><span class="section-num" aria-hidden="true">4</span> Descripción de la oferta</h2>
+
+              <div class="form-group">
+                <label for="job-description">Descripción del puesto <span class="req" aria-hidden="true">*</span></label>
+                <textarea id="job-description" name="descripcion" required placeholder="Describe las funciones principales, el equipo y el contexto del puesto." style="min-height: 130px;"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="job-requirements">Requisitos <span class="req" aria-hidden="true">*</span></label>
+                <textarea id="job-requirements" name="requisitos" required placeholder="Formación, experiencia y habilidades necesarias."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="job-valued">Se valorará (opcional)</label>
+                <textarea id="job-valued" name="se_valora" placeholder="Conocimientos o experiencias adicionales que suman pero no son imprescindibles."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="job-benefits">Qué ofrecemos (opcional)</label>
+                <textarea id="job-benefits" name="beneficios" placeholder="Seguro médico, teletrabajo, formación, flexibilidad horaria…"></textarea>
+              </div>
+            </div>
+
+            <!-- 5. Inclusión -->
+            <div class="offer-form-card">
+              <h2><span class="section-num" aria-hidden="true">5</span> Compromiso con la inclusión</h2>
+
+              <div class="form-group">
+                <label>Tipos de discapacidad para los que está orientada la oferta</label>
+                <p class="form-hint" style="margin-bottom: .6rem;">Puedes seleccionar varios. Dejar sin marcar equivale a "cualquier discapacidad".</p>
+                <div class="check-grid">
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Física / motora"> Física / motora</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Visual"> Visual</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Auditiva"> Auditiva</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Intelectual"> Intelectual</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Psicosocial / salud mental"> Psicosocial / salud mental</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="TEA"> TEA</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Orgánica / sistémica"> Orgánica / sistémica</label>
+                  <label class="check-label"><input type="checkbox" name="discapacidad_tipo" value="Cualquier discapacidad"> Cualquier discapacidad</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>¿La empresa ofrece ajustes razonables en el puesto? <span class="req" aria-hidden="true">*</span></label>
+                <div class="check-group" style="flex-direction: row; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: .4rem;">
+                  <label class="check-label"><input type="radio" name="ajustes_razonables" value="Sí" required> Sí</label>
+                  <label class="check-label"><input type="radio" name="ajustes_razonables" value="No"> No</label>
+                  <label class="check-label"><input type="radio" name="ajustes_razonables" value="En proceso"> En proceso de implementación</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="job-adjustments">Describe los ajustes disponibles (opcional)</label>
+                <textarea id="job-adjustments" name="descripcion_ajustes" placeholder="Ej. puesto adaptado para silla de ruedas, software de accesibilidad instalado, horario flexible para citas médicas…"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>¿Conocéis las bonificaciones a la contratación de personas con discapacidad?</label>
+                <div class="check-group" style="flex-direction: row; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: .4rem;">
+                  <label class="check-label"><input type="radio" name="conoce_bonificaciones" value="Sí"> Sí</label>
+                  <label class="check-label"><input type="radio" name="conoce_bonificaciones" value="No"> No</label>
+                  <label class="check-label"><input type="radio" name="conoce_bonificaciones" value="Queremos información"> Nos interesa recibir información</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-area">
+              <button type="submit" class="btn-submit" id="submit-btn">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Enviar oferta
+              </button>
+              <p class="submit-legal">
+                Al enviar aceptas nuestra <a href="privacidad.html">Política de privacidad</a> y el <a href="aviso-legal.html">Aviso legal</a>.
+                Revisamos cada oferta antes de publicarla (plazo habitual: 24–48 h).
+              </p>
+            </div>
+
+          </form>
+
+          <!-- Success state -->
+          <div class="offer-form-card form-success" id="form-success" aria-live="polite">
+            <div class="form-success-icon">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h3>¡Oferta recibida!</h3>
+            <p>Hemos recibido tu solicitud. La revisaremos en las próximas 24–48 horas y nos pondremos en contacto contigo para confirmar la publicación.</p>
+            <a href="index.html" class="btn btn-primary" style="margin-top:.5rem;">Ver el portal</a>
+          </div>
+
+          <!-- Error state -->
+          <div class="offer-form-card form-error" id="form-error" aria-live="polite">
+            <div class="form-error-icon">
+              <svg width="32" height="32" fill="none" stroke="#ef4444" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            </div>
+            <h3>Error al enviar</h3>
+            <p>No se pudo enviar el formulario. Por favor, escríbenos directamente a <a href="mailto:hola@inclujob.es">hola@inclujob.es</a> con los datos de la oferta.</p>
+            <button class="btn btn-outline" id="retry-btn" style="margin-top:.5rem;">Intentar de nuevo</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SIDEBAR ── -->
+      <aside class="offer-sidebar" aria-label="Información adicional">
+
+        <div class="sidebar-card">
+          <div class="sidebar-badge">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Gratuito durante el lanzamiento
+          </div>
+          <h3>¿Por qué publicar en IncluJob?</h3>
+          <ul>
+            <li>Acceso a candidatos con discapacidad cualificados y motivados.</li>
+            <li>Visibilidad entre entidades, asociaciones y servicios de empleo.</li>
+            <li>Información sobre bonificaciones y ayudas a la contratación.</li>
+            <li>Sellos de empresa inclusiva para fortalecer tu marca empleadora.</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>¿Cómo funciona?</h3>
+          <div class="sidebar-steps">
+            <div class="sidebar-step">
+              <span class="sidebar-step-num" aria-hidden="true">1</span>
+              <p><strong>Rellena el formulario</strong> con los datos de tu empresa y la oferta.</p>
+            </div>
+            <div class="sidebar-step">
+              <span class="sidebar-step-num" aria-hidden="true">2</span>
+              <p><strong>Revisamos la oferta</strong> en 24–48 h y te confirmamos por email.</p>
+            </div>
+            <div class="sidebar-step">
+              <span class="sidebar-step-num" aria-hidden="true">3</span>
+              <p><strong>Publicamos</strong> la oferta en el portal y en la newsletter.</p>
+            </div>
+            <div class="sidebar-step">
+              <span class="sidebar-step-num" aria-hidden="true">4</span>
+              <p><strong>Te enviamos</strong> las candidaturas directamente a tu email.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>¿Dudas?</h3>
+          <p>Escríbenos a <a href="mailto:hola@inclujob.es">hola@inclujob.es</a> o llámanos al <a href="tel:+34900123456">900 123 456</a> y te ayudamos sin compromiso.</p>
+          <p style="margin-top:.6rem;">También puedes consultar la <a href="ayudas-empleo.html">guía de ayudas al empleo</a> para conocer las bonificaciones disponibles.</p>
+        </div>
+
+      </aside>
+    </div>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" aria-label="IncluJob inicio">
+            <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2ecc71"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#0f2348" font-family="sans-serif" font-weight="800">IJ</text></svg>
+            <span style="color:#fff">IncluJob</span>
+          </a>
+          <p class="footer-tagline">El empleo inclusivo empieza aquí.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Navegación del pie de página">
+          <div class="footer-col">
+            <h3>Portal</h3>
+            <ul role="list">
+              <li><a href="index.html#empleos">Buscar empleo</a></li>
+              <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+              <li><a href="index.html#empresas">Empresas inclusivas</a></li>
+              <li><a href="index.html#newsletter">Newsletter</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Recursos</h3>
+            <ul role="list">
+              <li><a href="derechos-laborales.html">Guía de derechos laborales</a></li>
+              <li><a href="certificado-discapacidad.html">Certificado de discapacidad</a></li>
+              <li><a href="ayudas-empleo.html">Ayudas al empleo</a></li>
+              <li><a href="blog.html">Blog de inclusión</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Contacto</h3>
+            <ul role="list">
+              <li><a href="mailto:hola@inclujob.es">hola@inclujob.es</a></li>
+              <li><a href="tel:+34900123456">900 123 456</a></li>
+              <li><a href="aviso-legal.html">Aviso legal</a></li>
+              <li><a href="privacidad.html">Política de privacidad</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 IncluJob. Todos los derechos reservados.</p>
+        <p class="footer-a11y">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Sitio accesible WCAG 2.1 nivel AA
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="lib/gsap.min.js?v=20260520"></script>
+  <script defer src="lib/ScrollTrigger.min.js?v=20260520"></script>
+  <script defer src="lib/manifest.js?v=20260520"></script>
+  <script defer src="main.js?v=20260520"></script>
+
+  <!--
+    CONFIGURACIÓN DEL FORMULARIO:
+    Para recibir los envíos por email sin backend:
+    1. Regístrate gratis en https://formspree.io con hola@inclujob.es
+    2. Crea un nuevo formulario → copia tu Form ID (ej. "xpwzgkbo")
+    3. Sustituye el valor de FORM_ENDPOINT abajo por: https://formspree.io/f/TU_ID
+    Sin configurar, el formulario abre el cliente de correo como fallback.
+  -->
+  <script>
+  (function () {
+    var SB_URL = "https://kqrzdyxziystnsczalus.supabase.co";
+    var SB_KEY = "sb_publishable_A6AwmdZJaI-cosg0Ho1I4g_Jzh-vo9d";
+
+    var form      = document.getElementById("offer-form");
+    var successEl = document.getElementById("form-success");
+    var errorEl   = document.getElementById("form-error");
+    var submitBtn = document.getElementById("submit-btn");
+    var retryBtn  = document.getElementById("retry-btn");
+
+    if (!form) return;
+
+    function showSuccess() {
+      form.hidden = true;
+      errorEl.classList.remove("visible");
+      successEl.classList.add("visible");
+      successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function showError() {
+      submitBtn.removeAttribute("aria-busy");
+      submitBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Enviar oferta';
+      errorEl.classList.add("visible");
+      errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function validate() {
+      var valid = true;
+      form.querySelectorAll("[required]").forEach(function (el) {
+        if (!el.value.trim()) {
+          el.style.borderColor = "#ef4444";
+          el.setAttribute("aria-invalid", "true");
+          valid = false;
+        } else {
+          el.style.borderColor = "";
+          el.removeAttribute("aria-invalid");
+        }
+      });
+      var radioRequired = ["ajustes_razonables"];
+      radioRequired.forEach(function (name) {
+        var checked = form.querySelector("input[name='" + name + "']:checked");
+        if (!checked) {
+          form.querySelectorAll("input[name='" + name + "']").forEach(function (r) {
+            r.style.outline = "2px solid #ef4444";
+          });
+          valid = false;
+        }
+      });
+      return valid;
+    }
+
+    function buildPayload(fd) {
+      // Map form fields to Supabase jobs table columns
+      var discapacidadTipos = [];
+      fd.getAll("discapacidad_tipos").forEach(function(v) { discapacidadTipos.push(v); });
+      return {
+        empresa:            fd.get("empresa")            || "",
+        web_empresa:        fd.get("web_empresa")        || "",
+        nombre_contacto:    fd.get("nombre_contacto")   || "",
+        email_contacto:     fd.get("email_contacto")    || "",
+        telefono_contacto:  fd.get("telefono_contacto") || "",
+        puesto:             fd.get("puesto")             || "",
+        ciudad:             fd.get("ciudad")             || "",
+        modalidad:          fd.get("modalidad")          || "",
+        tipo_contrato:      fd.get("tipo_contrato")      || "",
+        sector:             fd.get("sector")             || "",
+        salario:            fd.get("salario")            || "",
+        descripcion:        fd.get("descripcion")        || "",
+        requisitos:         fd.get("requisitos")         || "",
+        beneficios:         fd.get("beneficios")         || "",
+        certificado_minimo: fd.get("certificado_minimo") || "",
+        discapacidad_tipos: discapacidadTipos.join(", "),
+        ajustes_razonables: fd.get("ajustes_razonables") || "",
+        estado:             "pendiente"
+      };
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!validate()) {
+        var firstInvalid = form.querySelector("[aria-invalid='true']");
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      var fd = new FormData(form);
+      submitBtn.setAttribute("aria-busy", "true");
+      submitBtn.textContent = "Enviando…";
+
+      fetch(SB_URL + "/rest/v1/jobs", {
+        method: "POST",
+        headers: {
+          "apikey":        SB_KEY,
+          "Authorization": "Bearer " + SB_KEY,
+          "Content-Type":  "application/json",
+          "Prefer":        "return=minimal"
+        },
+        body: JSON.stringify(buildPayload(fd))
+      })
+      .then(function(res) {
+        if (res.ok) { showSuccess(); }
+        else { showError(); }
+      })
+      .catch(function() { showError(); });
+    });
+
+    retryBtn && retryBtn.addEventListener("click", function () {
+      errorEl.classList.remove("visible");
+      form.hidden = false;
+      submitBtn.removeAttribute("aria-busy");
+      submitBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Enviar oferta';
+    });
+
+    form.addEventListener("input", function (e) {
+      if (e.target.style.borderColor === "rgb(239, 68, 68)") {
+        e.target.style.borderColor = "";
+        e.target.removeAttribute("aria-invalid");
+      }
+    });
+
+  })();
+  </script>
+
+</body>
+</html>

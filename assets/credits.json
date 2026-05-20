@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "src": "assets/img/hero.jpg",
+    "title": "Business Meeting",
+    "creator": "thetaxhaven",
+    "creator_url": "https://www.flickr.com/photos/83532250@N06",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/83532250@N06/7650804342",
+    "source": "flickr"
+  },
+  "team": {
+    "src": "assets/img/team.jpg",
+    "title": "Unconscious Bias in Recruiting Panel",
+    "creator": "jurvetson",
+    "creator_url": "https://www.flickr.com/photos/44124348109@N01",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/44124348109@N01/39902445151",
+    "source": "flickr"
+  },
+  "person-1": {
+    "src": "assets/img/person-1.jpg",
+    "title": "happy senior patient with friendly female nurse",
+    "creator": "agilemktg1",
+    "creator_url": "https://www.flickr.com/photos/68716695@N06",
+    "license": "pdm",
+    "license_version": "1.0",
+    "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/68716695@N06/29609199652",
+    "source": "flickr"
+  },
+  "person-2": {
+    "src": "assets/img/person-2.jpg",
+    "title": "Marisa Peacock talking at Social Mediating: Why Integrate Social Media Into Everyday Work?",
+    "creator": "nealstimler",
+    "creator_url": "https://www.flickr.com/photos/52357995@N07",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/52357995@N07/7166530872",
+    "source": "flickr"
+  }
+}
