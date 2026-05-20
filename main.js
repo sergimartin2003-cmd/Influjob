@@ -369,12 +369,11 @@
     // Do NOT use gsap.from() on them — it sets inline opacity:0 which overrides .is-visible.
 
     // Stats count-up triggered by scroll
+    // target is read at fire time so initSupabase can update data-count-to before scroll
     const statEls = $$("[data-count-to]");
     statEls.forEach(el => {
-      const target = parseInt(el.getAttribute("data-count-to"), 10);
       if (reduced) {
-        // Con movimiento reducido: mostrar valor final directamente
-        el.textContent = target.toLocaleString("es-ES");
+        el.textContent = parseInt(el.getAttribute("data-count-to"), 10).toLocaleString("es-ES");
         return;
       }
       ScrollTrigger.create({
@@ -382,6 +381,7 @@
         start: "top 85%",
         once: true,
         onEnter() {
+          const target = parseInt(el.getAttribute("data-count-to"), 10);
           gsap.to({ val: 0 }, {
             val: target,
             duration: 2,
@@ -414,8 +414,6 @@
      JOB FILTERS
   ───────────────────────────────────────── */
   function initFilters() {
-    if (!$$(".job-card").length) return;
-
     ["#filter-modality", "#filter-contract", "#filter-oficio", "#filter-disability"].forEach(id => {
       const sel = $(id);
       if (sel) sel.addEventListener("change", applyFilters);
@@ -528,9 +526,11 @@
   /* ─────────────────────────────────────────
      JOB MODAL
   ───────────────────────────────────────── */
+  var modalInitialized = false;
   function initModal() {
     const modal = $("#job-modal");
-    if (!modal) return;
+    if (!modal || modalInitialized) return;
+    modalInitialized = true;
 
     function openModal(jobId, focusApply) {
       // data.jobs puede ser undefined si manifest.js no cargó; fallback a window.__BRAND__
@@ -927,17 +927,29 @@
   /* ─────────────────────────────────────────
      SUPABASE LIVE JOBS
   ───────────────────────────────────────── */
-  // Cached live jobs array (updated on every poll)
   var liveJobs = [];
-  // Job currently open in the modal (needed by the apply form submit handler)
   var currentModalJob = null;
+  var fetchInFlight = false;
+
+  function renderJobsToGrid(jobs) {
+    var grid = $("[data-jobs]");
+    if (!grid || !jobs.length) return;
+    grid.innerHTML = jobs.map(buildCardHTML).join("");
+    applyFilters();
+  }
 
   function initSupabase() {
     if (!SB_URL || !SB_KEY) return;
 
+    // Render mock jobs immediately so grid is never empty while Supabase loads
+    if (data.jobs && data.jobs.length) renderJobsToGrid(data.jobs);
+
     function fetchAndRender() {
+      if (fetchInFlight) return;
+      fetchInFlight = true;
       sbGet("jobs?estado=eq.publicada&order=created_at.desc")
         .then(function(rows) {
+          fetchInFlight = false;
           if (!rows || !rows.length) return;
 
           // Adapt rows to normalized job objects
@@ -951,9 +963,6 @@
 
           // Replace grid contents with live cards
           grid.innerHTML = liveJobs.map(buildCardHTML).join("");
-
-          // Re-attach modal listeners to newly inserted cards
-          safe(initModal, "initModal:refresh");
 
           // Re-run tilt on new cards
           if (fineHover && !reduced) {
@@ -972,9 +981,18 @@
             });
           }
 
-          // Update stat counter for job offers
-          var statEl = $("[data-stat='ofertas']");
-          if (statEl) statEl.textContent = liveJobs.length;
+          // Update all offer counters with real count
+          var n = liveJobs.length;
+          // Filter bar counter (e.g. "70 ofertas")
+          var resultsCount = $("[data-results-count]");
+          if (resultsCount) resultsCount.textContent = String(n);
+          // Animated stats counter in the stats section
+          var statCount = $("[data-count-to]");
+          if (statCount) {
+            statCount.setAttribute("data-count-to", n);
+            statCount.setAttribute("aria-label", n + " ofertas activas");
+            statCount.textContent = n.toLocaleString("es-ES");
+          }
 
           // Update bot badge
           var badge = $(".bot-badge");
@@ -985,7 +1003,7 @@
 
           // Re-apply current filters so any active filter still works
           applyFilters();
-        });
+        }).catch(function() { fetchInFlight = false; });
     }
 
     fetchAndRender();
