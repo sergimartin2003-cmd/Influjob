@@ -82,6 +82,17 @@
     catch(e) { return ""; }
   }
 
+  function guessSector(title, desc) {
+    var t = ((title || "") + " " + (desc || "")).toLowerCase();
+    if (/inform|programad|develop|software|\bit\b|soporte.ti|datos|digital|web|tech/.test(t)) return "tecnología";
+    if (/admin|secretar|ofici|recepcion|contab|factur|auxiliar.admin/.test(t)) return "administración";
+    if (/limpiez|operario|almac[eé]n|log[ií]stic|transport|conductor|mensajer/.test(t)) return "logística";
+    if (/atenci[oó]n.al.cliente|call.center|teleoper|atencion.cliente/.test(t)) return "atención al cliente";
+    if (/hotel|restaur|hostel|camarero|cocinero|cocina|recepci[oó]n.hotel/.test(t)) return "hostelería";
+    if (/marketing|comunicaci[oó]n|community|redact|periodis|prensa/.test(t)) return "comunicación";
+    return "";
+  }
+
   function adaptSbJob(j) {
     var tipos = j.discapacidad_tipos
       ? j.discapacidad_tipos.split(",").map(function(s) { return s.trim().toLowerCase(); })
@@ -95,7 +106,7 @@
       city:         j.ciudad        || "",
       modality:     (j.modalidad    || "").toLowerCase(),
       contract:     j.tipo_contrato || "",
-      oficio:       SECTOR_OFICIO[j.sector] || "",
+      oficio:       SECTOR_OFICIO[j.sector] || guessSector(j.puesto, j.descripcion),
       salary:       j.salario       || "",
       disabilities: tipos,
       description:  j.descripcion   || "",
@@ -180,11 +191,11 @@
       const company = norm(card.querySelector(".job-company")?.textContent || "");
 
       const match =
-        (!mod  || cm.includes(mod))   &&
-        (!con  || cc.includes(con))   &&
-        (!ofi  || co.includes(ofi))   &&
-        (!dis  || cd.includes(dis))   &&
-        (!city || cit.includes(city)) &&
+        (!mod  || cm.includes(mod))          &&
+        (!con  || cc.includes(con))          &&
+        (!ofi  || !co || co.includes(ofi))   &&
+        (!dis  || !cd || cd.includes(dis))   &&
+        (!city || cit.includes(city))        &&
         (!text || title.includes(text) || company.includes(text));
 
       card.classList.toggle("is-hidden", !match);
