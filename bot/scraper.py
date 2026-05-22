@@ -4,7 +4,6 @@ Busca ofertas para personas con discapacidad y las sube a Supabase
 """
 
 import sys
-import os
 import re
 import hashlib
 import requests
@@ -148,9 +147,9 @@ for query in SEARCHES:
 
         salario = ""
         if salary_min and salary_max:
-            salario = str(int(salary_min)) + " - " + str(int(salary_max)) + " EUR/anio"
+            salario = str(int(salary_min)) + " – " + str(int(salary_max)) + " €/año"
         elif salary_min:
-            salario = "Desde " + str(int(salary_min)) + " EUR/anio"
+            salario = "Desde " + str(int(salary_min)) + " €/año"
 
         modalidad = "remoto" if "remoto" in (title + desc + location).lower() else "presencial"
         ciudad = city_from(location, title)
