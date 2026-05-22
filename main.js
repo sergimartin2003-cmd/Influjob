@@ -986,8 +986,18 @@
           fetchInFlight = false;
           if (!rows || !rows.length) return;
 
-          // Adapt rows to normalized job objects
-          liveJobs = rows.map(adaptSbJob);
+          // Empresas y patrones bloqueados en cliente (falsos positivos del bot)
+          var BLOCKED_COMPANIES = ["veterinary staff", "the vet office", "gmail"];
+          var BLOCKED_TITLE_WORDS = ["irlanda", "ireland", "uk jobs"];
+
+          // Adapt rows to normalized job objects, filtering blocked entries
+          liveJobs = rows.map(adaptSbJob).filter(function(job) {
+            var co = (job.company || "").toLowerCase();
+            var ti = (job.title  || "").toLowerCase();
+            if (BLOCKED_COMPANIES.some(function(b) { return co.includes(b); })) return false;
+            if (BLOCKED_TITLE_WORDS.some(function(b) { return ti.includes(b); })) return false;
+            return true;
+          });
 
           // Merge with manifest fallback — live takes priority over mock
           data.jobs = liveJobs;
