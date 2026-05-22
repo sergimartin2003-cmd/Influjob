@@ -125,9 +125,10 @@
     var modClass = mod === "híbrido" ? "hibrido" : mod;
     var modLabel = mod.charAt(0).toUpperCase() + mod.slice(1);
     var dateStr  = job.date ? formatJobDate(job.date) : "";
-    var disaBadges = (job.disabilities || [])
-      .map(function(d) { return '<span class="disability-badge" title="Discapacidad ' + d + '">' + (DISA_ICONS[d] || "●") + "</span>"; })
-      .join("");
+    var disaList = job.disabilities || [];
+    var disaBadges = disaList.length
+      ? disaList.map(function(d) { return '<span class="disability-badge" title="Discapacidad ' + d + '">' + (DISA_ICONS[d] || "●") + "</span>"; }).join("")
+      : '<span class="disability-badge disability-badge--generic" title="Oferta para personas con discapacidad">♿</span>';
 
     return '<article class="job-card reveal" role="listitem"' +
       ' data-job-id="'       + escHTML(job.id)       + '"' +
@@ -148,9 +149,9 @@
       '<div class="job-info">' +
         '<span class="job-city">' + SVG_PIN + ' ' + escHTML(job.city) + '</span>' +
         '<span class="job-contract">' + escHTML(job.contract) + '</span>' +
-        (job.salary ? '<span class="job-salary">' + escHTML(job.salary) + '</span>' : '') +
+        '<span class="job-salary">' + escHTML(job.salary || "A negociar") + '</span>' +
       '</div>' +
-      (disaBadges ? '<div class="job-disabilities" aria-label="Compatible con discapacidad">' + disaBadges + '</div>' : '') +
+      '<div class="job-disabilities" aria-label="Compatible con discapacidad">' + disaBadges + '</div>' +
       '<div class="job-actions">' +
         '<button type="button" class="btn btn-detail" data-open-modal="' + escHTML(job.id) + '" aria-label="Ver detalles de ' + escHTML(job.title) + ' en ' + escHTML(job.company) + '">Ver detalles</button>' +
         '<button type="button" class="btn btn-apply"  data-open-modal="' + escHTML(job.id) + '" aria-label="Enviar currículum para ' + escHTML(job.title) + '">Enviar CV</button>' +
@@ -991,11 +992,16 @@
           var BLOCKED_TITLE_WORDS = ["irlanda", "ireland", "uk jobs"];
 
           // Adapt rows to normalized job objects, filtering blocked entries
+          var companyCount = {};
+          var MAX_PER_COMPANY = 5;
           liveJobs = rows.map(adaptSbJob).filter(function(job) {
             var co = (job.company || "").toLowerCase();
             var ti = (job.title  || "").toLowerCase();
             if (BLOCKED_COMPANIES.some(function(b) { return co.includes(b); })) return false;
             if (BLOCKED_TITLE_WORDS.some(function(b) { return ti.includes(b); })) return false;
+            // Máximo 5 ofertas por empresa para evitar monopolio en el listado
+            companyCount[co] = (companyCount[co] || 0) + 1;
+            if (companyCount[co] > MAX_PER_COMPANY) return false;
             return true;
           });
 
