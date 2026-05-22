@@ -1868,6 +1868,8 @@ input { font: inherit; }
 /* =============================================================
    Dark mode
    ============================================================= */
+/* data-theme se aplica en <body>, así que usamos body[data-theme="dark"]
+   para el propio body, y [data-theme="dark"] X para los hijos */
 [data-theme="dark"] {
   --ink:        #dce8f8;
   --gray-100:   #192033;
@@ -1883,7 +1885,8 @@ input { font: inherit; }
   --shadow-lg:  0 12px 40px rgba(0,0,0,.7), 0 4px 12px rgba(0,0,0,.4);
 }
 
-[data-theme="dark"] body { background: #111827; color: var(--ink); }
+/* Fondo y color base del body en modo oscuro */
+body[data-theme="dark"] { background: #111827; color: var(--ink); }
 
 [data-theme="dark"] .nav { background: rgba(15,24,40,0.92); }
 
@@ -2039,3 +2042,78 @@ input { font: inherit; }
   color: #90c0f8;
   border-color: #90c0f8;
 }
+
+/* =============================================================
+   Dark mode — subpáginas y elementos extra
+   ============================================================= */
+
+/* Áreas de contenido con fondo blanco que no están cubiertas */
+[data-theme="dark"] .prose-section,
+[data-theme="dark"] .content-section,
+[data-theme="dark"] main { background: #111827; }
+
+/* Hero de subpáginas */
+[data-theme="dark"] .page-hero { background: #0a1628; }
+
+/* Tarjetas genéricas / cards de blog (hover y children extra) */
+[data-theme="dark"] .blog-card:hover { background: #1e2a42; }
+[data-theme="dark"] .blog-card h3,
+[data-theme="dark"] .blog-card h2 { color: var(--ink); }
+[data-theme="dark"] .blog-card p,
+[data-theme="dark"] .blog-card-excerpt { color: var(--gray-500); }
+[data-theme="dark"] .blog-card-meta   { color: var(--gray-400); }
+[data-theme="dark"] .blog-card-title a { color: var(--ink); }
+[data-theme="dark"] .blog-card-title a:hover { color: #90c0f8; }
+[data-theme="dark"] .blog-tag          { background: var(--blue-pale); color: #90c0f8; border-color: transparent; }
+
+/* Formulario de publicar oferta */
+[data-theme="dark"] .form-section { background: #111827; }
+[data-theme="dark"] .form-card    { background: #1a2540; border-color: var(--gray-300); }
+[data-theme="dark"] .form-group label { color: var(--ink); }
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,
+[data-theme="dark"] .form-group textarea {
+  background: #111827;
+  color: var(--ink);
+  border-color: var(--gray-300);
+}
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder { color: var(--gray-400); }
+[data-theme="dark"] .form-hint { color: var(--gray-500); }
+
+/* Nav links en modo oscuro (hover) */
+[data-theme="dark"] .nav-link:hover { color: #90c0f8; }
+[data-theme="dark"] .nav-link::after { background: #90c0f8; }
+
+/* Botón publicar oferta en nav */
+[data-theme="dark"] .btn-publish { background: var(--green); color: #fff; }
+
+/* Accesibility toolbar */
+[data-theme="dark"] .a11y-toolbar { background: #1a2540; border-color: var(--gray-300); }
+[data-theme="dark"] .a11y-btn { color: var(--ink); }
+
+/* Etiquetas y badges genéricos */
+[data-theme="dark"] .tag,
+[data-theme="dark"] .badge { background: var(--blue-pale); color: #90c0f8; }
+
+/* Separadores / hr */
+[data-theme="dark"] hr { border-color: var(--gray-300); }
+
+/* Textos de apoyo */
+[data-theme="dark"] .text-muted { color: var(--gray-500); }
+
+/* Íconos SVG inline que pueden heredar color incorrecto */
+[data-theme="dark"] .icon { color: var(--gray-500); }
+
+/* Tabla en páginas de contenido */
+[data-theme="dark"] table { border-color: var(--gray-300); }
+[data-theme="dark"] th { background: #1e2a42; color: var(--ink); }
+[data-theme="dark"] td { border-color: var(--gray-300); color: var(--gray-700); }
+[data-theme="dark"] tr:nth-child(even) td { background: #192033; }
+
+/* Hero search input placeholder */
+[data-theme="dark"] .hero-search input::placeholder,
+[data-theme="dark"] .hero-search select option { color: var(--gray-500); background: #1a2540; }
+
+/* Modal overlay */
+[data-theme="dark"] .modal-overlay { background: rgba(0,0,0,.75); }
