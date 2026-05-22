@@ -244,7 +244,7 @@
     activeCity = "";
     activeText = "";
     $$(".hero-tag").forEach(t => t.setAttribute("aria-pressed", "false"));
-    ["#filter-modality", "#filter-contract", "#filter-oficio", "#filter-disability"].forEach(id => {
+    ["#filter-city", "#filter-modality", "#filter-contract", "#filter-oficio", "#filter-disability"].forEach(id => {
       const sel = $(id);
       if (sel) sel.value = "";
     });
@@ -424,6 +424,18 @@
       if (sel) sel.addEventListener("change", () => applyFilters(true));
     });
 
+    // Filtro de ciudad en la barra (sincroniza con activeCity del hero)
+    const cityBar = $("#filter-city");
+    if (cityBar) {
+      cityBar.addEventListener("change", () => {
+        activeCity = cityBar.value;
+        // Sync el select del hero si existe
+        const heroCity = $("#search-city");
+        if (heroCity) heroCity.value = cityBar.value;
+        applyFilters(true);
+      });
+    }
+
     // Establecer estado inicial (aria-hidden + paginación)
     applyFilters();
 
@@ -473,6 +485,10 @@
       e.preventDefault();
       activeCity = norm($("#search-city")?.value || "");
       activeText = norm($("#search-q")?.value || "");
+
+      // Mirror city into the filter bar
+      const cityBar2 = $("#filter-city");
+      if (cityBar2) cityBar2.value = $("#search-city")?.value || "";
 
       // Mirror disability into the filter bar
       const disVal = ($("#search-disability")?.value || "");

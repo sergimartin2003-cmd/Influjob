@@ -179,7 +179,7 @@ for query in SEARCHES:
             "source_url":    link,
             "external_id":   ext_id,
             "fuente":        "Adzuna",
-            "estado":        "pendiente"
+            "estado":        estado  # "publicada" si tiene keywords fuertes, "pendiente" si débiles
         }
 
         if insert_job(payload):

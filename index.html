@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
 
   <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=20260524">
+  <link rel="stylesheet" href="styles.css?v=20260525">
 
   <!-- Open Graph / redes sociales -->
   <meta property="og:type"        content="website">
@@ -193,6 +193,24 @@
 
         <!-- Filters bar -->
         <div class="filters-bar reveal" role="group" aria-label="Filtros de búsqueda">
+          <div class="filter-group">
+            <label for="filter-city" class="filter-label">Ciudad</label>
+            <select id="filter-city" class="filter-select" aria-label="Filtrar por ciudad">
+              <option value="">Cualquier ciudad</option>
+              <option value="madrid">Madrid</option>
+              <option value="barcelona">Barcelona</option>
+              <option value="valencia">Valencia</option>
+              <option value="sevilla">Sevilla</option>
+              <option value="bilbao">Bilbao</option>
+              <option value="zaragoza">Zaragoza</option>
+              <option value="málaga">Málaga</option>
+              <option value="murcia">Murcia</option>
+              <option value="palma">Palma</option>
+              <option value="alicante">Alicante</option>
+              <option value="a coruña">A Coruña</option>
+              <option value="remoto">Remoto</option>
+            </select>
+          </div>
           <div class="filter-group">
             <label for="filter-modality" class="filter-label">Modalidad</label>
             <select id="filter-modality" class="filter-select" aria-label="Filtrar por modalidad">
@@ -1073,7 +1091,7 @@
   <script defer src="lib/gsap.min.js?v=20260519"></script>
   <script defer src="lib/ScrollTrigger.min.js?v=20260519"></script>
   <script defer src="lib/manifest.js?v=20260522"></script>
-  <script defer src="main.js?v=20260524"></script>
+  <script defer src="main.js?v=20260525"></script>
 </body>
 </html>
 
