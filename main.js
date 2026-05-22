@@ -112,6 +112,7 @@
       description:  j.descripcion   || "",
       requirements: (j.requisitos   || "").split("\n").map(function(s){return s.trim();}).filter(Boolean),
       benefits:     (j.beneficios   || "").split("\n").map(function(s){return s.trim();}).filter(Boolean),
+      source_url:     j.source_url    || "",
       date:           j.created_at ? j.created_at.substring(0, 10) : "",
       email_contacto: j.email_contacto || ""
     };
@@ -558,8 +559,9 @@
         si("modal-contract",  card.dataset.contract || "—");
         si("modal-salary",    "A negociar");
         si("modal-description", "");
-        const rl = $("#modal-requirements"); if (rl) rl.innerHTML = "";
-        const bl = $("#modal-benefits");     if (bl) bl.innerHTML = "";
+        const rw = $("#modal-requirements-wrap"); if (rw) rw.hidden = true;
+        const bw = $("#modal-benefits-wrap");     if (bw) bw.hidden = true;
+        const sl = $("#modal-source-link");       if (sl) sl.hidden = true;
         const form = $("#apply-form"); const succ = $("#apply-success");
         if (form) { form.reset(); form.hidden = false; }
         if (succ) succ.hidden = true;
@@ -586,14 +588,40 @@
       setInner("modal-salary", job.salary || "A negociar");
       setInner("modal-description", job.description || "");
 
+      // Requisitos
+      const reqWrap = $("#modal-requirements-wrap");
       const reqList = $("#modal-requirements");
-      if (reqList && job.requirements) {
-        reqList.innerHTML = job.requirements.map(r => `<li>${escHTML(r)}</li>`).join("");
+      if (reqList && reqWrap) {
+        if (job.requirements && job.requirements.length) {
+          reqList.innerHTML = job.requirements.map(r => `<li>${escHTML(r)}</li>`).join("");
+          reqWrap.hidden = false;
+        } else {
+          reqWrap.hidden = true;
+        }
       }
 
+      // Beneficios
+      const benWrap = $("#modal-benefits-wrap");
       const benList = $("#modal-benefits");
-      if (benList && job.benefits) {
-        benList.innerHTML = job.benefits.map(b => `<li>${escHTML(b)}</li>`).join("");
+      if (benList && benWrap) {
+        if (job.benefits && job.benefits.length) {
+          benList.innerHTML = job.benefits.map(b => `<li>${escHTML(b)}</li>`).join("");
+          benWrap.hidden = false;
+        } else {
+          benWrap.hidden = true;
+        }
+      }
+
+      // Enlace a la oferta original (jobs de Adzuna tienen source_url)
+      var linkWrap = $("#modal-source-link");
+      if (linkWrap) {
+        var srcUrl = job.source_url || "";
+        if (srcUrl && srcUrl.startsWith("http")) {
+          linkWrap.href = srcUrl;
+          linkWrap.hidden = false;
+        } else {
+          linkWrap.hidden = true;
+        }
       }
 
       // Reset form and button state

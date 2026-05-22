@@ -2043,6 +2043,34 @@ body[data-theme="dark"] { background: #111827; color: var(--ink); }
   border-color: #90c0f8;
 }
 
+/* Enlace a oferta original en el modal */
+.btn-source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin-top: 1.25rem;
+  padding: .6rem 1.1rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--blue-mid);
+  color: var(--blue-mid);
+  font-size: .88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .18s, color .18s;
+}
+.btn-source-link:hover {
+  background: var(--blue-mid);
+  color: #fff;
+}
+[data-theme="dark"] .btn-source-link {
+  border-color: #90c0f8;
+  color: #90c0f8;
+}
+[data-theme="dark"] .btn-source-link:hover {
+  background: #90c0f8;
+  color: #111827;
+}
+
 /* =============================================================
    Dark mode — subpáginas y elementos extra
    ============================================================= */

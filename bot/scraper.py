@@ -37,6 +37,10 @@ WEAK_KEYWORDS = [
     "igualdad de oportunidades"
 ]
 
+# Empresas/títulos falsos positivos que no son ofertas para personas con discapacidad
+BLACKLIST_COMPANIES = ["veterinary staff", "the vet office", "gmail"]
+BLACKLIST_TITLE_PATTERNS = ["irlanda", "ireland", "uk jobs", "reino unido"]
+
 SEARCHES = [
     "discapacidad",
     "certificado discapacidad empleo",
@@ -132,6 +136,16 @@ for query in SEARCHES:
         salary_max = job.get("salary_max")
 
         if not title:
+            continue
+
+        # Filtro blacklist: empresas y títulos que no son ofertas para discapacidad
+        company_lower = company.lower()
+        title_lower = title.lower()
+        if any(b in company_lower for b in BLACKLIST_COMPANIES):
+            print("  [blacklist-empresa] " + title[:65])
+            continue
+        if any(b in title_lower for b in BLACKLIST_TITLE_PATTERNS):
+            print("  [blacklist-titulo] " + title[:65])
             continue
 
         estado = get_estado(title, desc)
