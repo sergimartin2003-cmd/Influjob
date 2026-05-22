@@ -995,10 +995,14 @@
     // Render mock jobs immediately so grid is never empty while Supabase loads
     if (data.jobs && data.jobs.length) renderJobsToGrid(data.jobs);
 
+    // Indicador de carga sutil en el contador
+    var counter = $("[data-results-count]");
+    if (counter) counter.textContent = "…";
+
     function fetchAndRender() {
       if (fetchInFlight) return;
       fetchInFlight = true;
-      sbGet("jobs?estado=eq.publicada&order=created_at.desc")
+      sbGet("jobs?estado=eq.publicada&order=created_at.desc&select=id,puesto,empresa,ciudad,modalidad,tipo_contrato,salario,descripcion,requisitos,beneficios,source_url,sector,tipos_discapacidad,created_at,email_contacto&limit=500")
         .then(function(rows) {
           fetchInFlight = false;
           if (!rows || !rows.length) return;
@@ -1007,17 +1011,12 @@
           var BLOCKED_COMPANIES = ["veterinary staff", "the vet office", "gmail"];
           var BLOCKED_TITLE_WORDS = ["irlanda", "ireland", "uk jobs"];
 
-          // Adapt rows to normalized job objects, filtering blocked entries
-          var companyCount = {};
-          var MAX_PER_COMPANY = 5;
+          // Adapt rows to normalized job objects, filtering only hard-blocked entries
           liveJobs = rows.map(adaptSbJob).filter(function(job) {
             var co = (job.company || "").toLowerCase();
             var ti = (job.title  || "").toLowerCase();
             if (BLOCKED_COMPANIES.some(function(b) { return co.includes(b); })) return false;
             if (BLOCKED_TITLE_WORDS.some(function(b) { return ti.includes(b); })) return false;
-            // Máximo 5 ofertas por empresa para evitar monopolio en el listado
-            companyCount[co] = (companyCount[co] || 0) + 1;
-            if (companyCount[co] > MAX_PER_COMPANY) return false;
             return true;
           });
 
@@ -1027,8 +1026,9 @@
           var grid = $("[data-jobs]");
           if (!grid) return;
 
-          // Replace grid contents with live cards
+          // Replace grid contents with live cards — mark all visible immediately
           grid.innerHTML = liveJobs.map(buildCardHTML).join("");
+          $$(".job-card", grid).forEach(function(c) { c.classList.add("is-visible"); });
 
           // Re-run tilt on new cards
           if (fineHover && !reduced) {
