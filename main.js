@@ -1002,7 +1002,7 @@
     function fetchAndRender() {
       if (fetchInFlight) return;
       fetchInFlight = true;
-      sbGet("jobs?estado=eq.publicada&order=created_at.desc&select=id,puesto,empresa,ciudad,modalidad,tipo_contrato,salario,descripcion,requisitos,beneficios,source_url,sector,tipos_discapacidad,created_at,email_contacto&limit=500")
+      sbGet("jobs?estado=eq.publicada&order=created_at.desc&limit=500")
         .then(function(rows) {
           fetchInFlight = false;
           if (!rows || !rows.length) return;
