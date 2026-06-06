@@ -705,42 +705,22 @@
         if (submitBtn) submitBtn.disabled = true;
 
         try {
-          // 1. Upload CV to Supabase Storage if provided
-          var cvUrl = "";
-          var fileInput = $("#apply-cv");
-          var file = fileInput && fileInput.files && fileInput.files[0];
-          if (file && SB_URL && SB_KEY) {
-            var ext = file.name.split(".").pop() || "pdf";
-            var fname = "cv-" + Date.now() + "-" + Math.random().toString(36).slice(2) + "." + ext;
-            var uploadRes = await fetch(SB_URL + "/storage/v1/object/cvs/" + fname, {
-              method: "POST",
-              headers: {
-                "apikey": SB_KEY,
-                "Authorization": "Bearer " + SB_KEY,
-                "Content-Type": file.type || "application/octet-stream"
-              },
-              body: file
-            });
-            if (uploadRes.ok) {
-              cvUrl = SB_URL + "/storage/v1/object/public/cvs/" + fname;
-            }
-          }
-
-          // 2. Get current job snapshot for the application record
+          // Los datos del candidato se envían a Supabase únicamente para que
+          // el trigger BEFORE INSERT los reenvíe por email a la empresa.
+          // El trigger los anula antes de persistir: nada queda guardado en BD.
           var job = currentModalJob || {};
 
-          // 3. POST application to Supabase
           var payload = {
             job_id:        job.id ? Number(job.id) : null,
-            job_title:     job.title     || "",
-            company_name:  job.company   || "",
-            company_email: job.email_contacto || "",
-            nombre:        (applyForm.querySelector("[name=name]")      || {}).value || "",
-            email:         (applyForm.querySelector("[name=email]")     || {}).value || "",
-            telefono:      (applyForm.querySelector("[name=phone]")     || {}).value || "",
-            discapacidad:  (applyForm.querySelector("[name=disability]")|| {}).value || "",
-            carta:         (applyForm.querySelector("[name=message]")   || {}).value || "",
-            cv_url:        cvUrl
+            job_title:     job.title           || "",
+            company_name:  job.company         || "",
+            company_email: job.email_contacto  || "",
+            nombre:        (applyForm.querySelector("[name=name]")       || {}).value || "",
+            email:         (applyForm.querySelector("[name=email]")      || {}).value || "",
+            telefono:      (applyForm.querySelector("[name=phone]")      || {}).value || "",
+            discapacidad:  (applyForm.querySelector("[name=disability]") || {}).value || "",
+            carta:         (applyForm.querySelector("[name=message]")    || {}).value || "",
+            cv_url:        ""
           };
 
           var ok = await sbPost("applications", payload);

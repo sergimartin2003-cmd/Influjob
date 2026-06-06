@@ -5,17 +5,20 @@
 create extension if not exists pg_net with schema extensions;
 
 -- 2. Tabla de candidaturas
+-- Los campos de candidato (nombre, email, etc.) existen para que el INSERT
+-- del frontend no falle, pero el trigger BEFORE INSERT los usa para enviar
+-- el email y los anula antes de persistir. En BD solo quedan los metadatos del puesto.
 create table if not exists public.applications (
   id            bigserial primary key,
   created_at    timestamptz default now(),
   job_id        bigint references public.jobs(id) on delete set null,
-  -- Snapshot del puesto (por si se borra la oferta)
+  -- Snapshot del puesto
   job_title     text,
   company_name  text,
   company_email text,
-  -- Datos del candidato
-  nombre        text not null,
-  email         text not null,
+  -- Datos del candidato: siempre NULL tras el trigger (se usan solo para el email)
+  nombre        text,
+  email         text,
   telefono      text,
   discapacidad  text,
   carta         text,
@@ -66,10 +69,12 @@ as $$
 $$;
 
 -- 6. Función de notificación de email via Resend
--- IMPORTANTE: configura las claves en Supabase SQL Editor tras ejecutar este archivo:
+-- El trigger recibe los datos del candidato en campos temporales del payload JSON
+-- (pasados como columnas extra que el trigger lee de new.*), envía el email
+-- directamente a la empresa y NO persiste ningún dato personal.
+--
+-- IMPORTANTE: configura la clave en Supabase SQL Editor:
 --   alter database postgres set app.resend_api_key = 'tu_clave_resend';
---   alter database postgres set app.admin_email    = 'tu@email.com';
--- NO escribas las claves directamente en este archivo.
 
 create or replace function public.notify_company_application()
 returns trigger
@@ -78,8 +83,8 @@ security definer
 as $$
 declare
   v_resend_key  text := current_setting('app.resend_api_key', true);
-  v_admin_email text := current_setting('app.admin_email',    true);
   v_from_email  text := 'IncluJob <onboarding@resend.dev>';
+  v_to_email    text;
   v_email_body  text;
   v_subject     text;
 begin
@@ -88,15 +93,17 @@ begin
     return new;
   end if;
 
-  if v_admin_email is null or v_admin_email = '' then
-    raise warning 'notify_company_application: app.admin_email no configurada, email no enviado';
+  v_to_email := coalesce(nullif(trim(new.company_email), ''), null);
+  if v_to_email is null then
+    raise warning 'notify_company_application: candidatura sin company_email, email no enviado (job_id=%)', new.job_id;
     return new;
   end if;
 
-  v_subject := 'Nueva candidatura para "' || coalesce(nullif(new.job_title,''), 'puesto sin especificar') || '" — IncluJob';
+  v_subject := 'Nueva candidatura — ' || coalesce(nullif(new.job_title,''), 'IncluJob');
 
-  v_email_body := '
-<!DOCTYPE html>
+  -- Los datos del candidato llegan en columnas temporales del payload.
+  -- El frontend los envía; el trigger los usa aquí y no los persiste.
+  v_email_body := '<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><style>
   body{font-family:Arial,sans-serif;background:#f5f7fa;margin:0;padding:0}
@@ -134,7 +141,7 @@ begin
        then '<hr class="divider"><div class="field"><label>Currículum</label><a class="cv-btn" href="' || private.html_escape(new.cv_url) || '" target="_blank">Descargar CV</a></div>' else '' end
     || '
   </div>
-  <div class="footer">Este mensaje ha sido enviado automáticamente por IncluJob · <a href="https://inclujob.es">inclujob.es</a></div>
+  <div class="footer">Este mensaje fue enviado automáticamente por <a href="https://inclujob.es">IncluJob</a></div>
 </div>
 </body></html>';
 
@@ -146,20 +153,28 @@ begin
     ),
     body    := jsonb_build_object(
       'from',    v_from_email,
-      'to',      array[v_admin_email],
+      'to',      array[v_to_email],
       'subject', v_subject,
       'html',    v_email_body
     )
   );
 
+  -- Borra datos personales antes de persistir la fila
+  new.nombre       := null;
+  new.email        := null;
+  new.telefono     := null;
+  new.discapacidad := null;
+  new.carta        := null;
+  new.cv_url       := null;
+
   return new;
 end;
 $$;
 
--- 6. Trigger
+-- 7. Trigger — BEFORE INSERT para poder limpiar datos antes de guardar
 drop trigger if exists trg_notify_company on public.applications;
 create trigger trg_notify_company
-  after insert on public.applications
+  before insert on public.applications
   for each row
   execute function public.notify_company_application();
 

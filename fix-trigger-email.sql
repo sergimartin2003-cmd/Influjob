@@ -23,10 +23,9 @@ language plpgsql
 security definer
 as $$
 declare
-  -- Configura estas claves en Supabase Vault (Settings → Vault) en lugar de hardcodearlas
   v_resend_key  text := current_setting('app.resend_api_key', true);
-  v_admin_email text := current_setting('app.admin_email',    true);
   v_from_email  text := 'IncluJob <onboarding@resend.dev>';
+  v_to_email    text;
   v_subject     text;
   v_body        text;
 begin
@@ -35,8 +34,9 @@ begin
     return new;
   end if;
 
-  if v_admin_email is null or v_admin_email = '' then
-    raise warning 'notify_company_application: app.admin_email no configurada, email no enviado';
+  v_to_email := coalesce(nullif(trim(new.company_email), ''), null);
+  if v_to_email is null then
+    raise warning 'notify_company_application: sin company_email, email no enviado (job_id=%)', new.job_id;
     return new;
   end if;
 
@@ -48,8 +48,7 @@ begin
     || '<p><strong>Email:</strong> <a href="mailto:' || private.html_escape(new.email) || '">' || private.html_escape(new.email) || '</a></p>'
     || case when coalesce(new.telefono, '') != '' then '<p><strong>Teléfono:</strong> ' || private.html_escape(new.telefono) || '</p>' else '' end
     || case when coalesce(new.discapacidad, '') != '' then '<p><strong>Discapacidad:</strong> ' || private.html_escape(new.discapacidad) || '</p>' else '' end
-    || case when coalesce(new.carta, '') != '' then '<hr><p><strong>Carta:</strong><br>' || private.html_escape(new.carta) || '</p>' else '' end
-    || case when coalesce(new.cv_url, '') != '' then '<p><a href="' || private.html_escape(new.cv_url) || '">Descargar CV</a></p>' else '' end;
+    || case when coalesce(new.carta, '') != '' then '<hr><p><strong>Carta:</strong><br>' || private.html_escape(new.carta) || '</p>' else '' end;
 
   perform net.http_post(
     url     := 'https://api.resend.com/emails',
@@ -59,11 +58,19 @@ begin
     ),
     body    := jsonb_build_object(
       'from',    v_from_email,
-      'to',      array[v_admin_email],
+      'to',      array[v_to_email],
       'subject', v_subject,
       'html',    v_body
     )
   );
+
+  -- Borra datos personales antes de persistir
+  new.nombre       := null;
+  new.email        := null;
+  new.telefono     := null;
+  new.discapacidad := null;
+  new.carta        := null;
+  new.cv_url       := null;
 
   return new;
 end;
@@ -71,4 +78,3 @@ $$;
 
 -- Después de ejecutar este archivo, configura en Supabase SQL Editor:
 --   alter database postgres set app.resend_api_key = 'tu_clave_resend';
---   alter database postgres set app.admin_email    = 'tu@email.com';
