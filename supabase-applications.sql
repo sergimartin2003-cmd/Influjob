@@ -50,9 +50,26 @@ create policy "CV es de lectura pública"
   to anon
   using (bucket_id = 'cvs');
 
--- 5. Función de notificación de email via Resend
--- IMPORTANTE: sustituye 're_TU_API_KEY' por tu clave real de resend.com
--- y 'inclujob.es' por tu dominio verificado en Resend (o deja onboarding@resend.dev para pruebas)
+-- 5. Función auxiliar para escapar HTML (previene XSS en emails)
+create or replace function private.html_escape(input text)
+returns text
+language sql
+immutable strict
+as $$
+  select replace(replace(replace(replace(replace(
+    coalesce(input, ''),
+    '&', '&amp;'),
+    '<', '&lt;'),
+    '>', '&gt;'),
+    '"', '&quot;'),
+    '''', '&#39;')
+$$;
+
+-- 6. Función de notificación de email via Resend
+-- IMPORTANTE: configura las claves en Supabase SQL Editor tras ejecutar este archivo:
+--   alter database postgres set app.resend_api_key = 'tu_clave_resend';
+--   alter database postgres set app.admin_email    = 'tu@email.com';
+-- NO escribas las claves directamente en este archivo.
 
 create or replace function public.notify_company_application()
 returns trigger
@@ -60,13 +77,22 @@ language plpgsql
 security definer
 as $$
 declare
-  v_resend_key  text := 're_Bt1pSbcY_74fLgwpToQStfwz4tXyn3eJX';
+  v_resend_key  text := current_setting('app.resend_api_key', true);
+  v_admin_email text := current_setting('app.admin_email',    true);
   v_from_email  text := 'IncluJob <onboarding@resend.dev>';
   v_email_body  text;
   v_subject     text;
 begin
-  -- Para pruebas sin dominio propio: siempre enviar a este email.
-  -- Cuando tengas dominio verificado en Resend, cambia esto por: coalesce(nullif(new.company_email,''), 'sergi.martin.2003@gmail.com')
+  if v_resend_key is null or v_resend_key = '' then
+    raise warning 'notify_company_application: app.resend_api_key no configurada, email no enviado';
+    return new;
+  end if;
+
+  if v_admin_email is null or v_admin_email = '' then
+    raise warning 'notify_company_application: app.admin_email no configurada, email no enviado';
+    return new;
+  end if;
+
   v_subject := 'Nueva candidatura para "' || coalesce(nullif(new.job_title,''), 'puesto sin especificar') || '" — IncluJob';
 
   v_email_body := '
@@ -84,7 +110,7 @@ begin
   .field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;margin-bottom:4px}
   .field p{margin:0;color:#111;font-size:15px}
   .divider{border:none;border-top:1px solid #e5e7eb;margin:20px 0}
-  .carta{background:#f9fafb;border-left:3px solid #2ecc71;padding:14px 16px;border-radius:0 8px 8px 0;color:#374151;font-size:14px;line-height:1.6}
+  .carta{background:#f9fafb;border-left:3px solid #2ecc71;padding:14px 16px;border-radius:0 8px 8px 0;color:#374151;font-size:14px;line-height:1.6;white-space:pre-wrap}
   .cv-btn{display:inline-block;margin-top:8px;padding:10px 20px;background:#2ecc71;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
   .footer{background:#f9fafb;padding:16px 32px;font-size:12px;color:#9ca3af;border-top:1px solid #e5e7eb}
 </style></head>
@@ -92,27 +118,26 @@ begin
 <div class="wrap">
   <div class="header">
     <h1>Nueva candidatura recibida</h1>
-    <p>Puesto: <strong>' || coalesce(new.job_title,'—') || '</strong></p>
+    <p>Puesto: <strong>' || private.html_escape(new.job_title) || '</strong></p>
   </div>
   <div class="body">
     <h2>Datos del candidato</h2>
-    <div class="field"><label>Nombre</label><p>' || new.nombre || '</p></div>
-    <div class="field"><label>Email</label><p><a href="mailto:' || new.email || '">' || new.email || '</a></p></div>'
-    || case when new.telefono is not null and new.telefono != ''
-       then '<div class="field"><label>Teléfono</label><p>' || new.telefono || '</p></div>' else '' end
-    || case when new.discapacidad is not null and new.discapacidad != ''
-       then '<div class="field"><label>Tipo de discapacidad</label><p>' || new.discapacidad || '</p></div>' else '' end
-    || case when new.carta is not null and new.carta != ''
-       then '<hr class="divider"><div class="field"><label>Carta de presentación</label><div class="carta">' || new.carta || '</div></div>' else '' end
-    || case when new.cv_url is not null and new.cv_url != ''
-       then '<hr class="divider"><div class="field"><label>Currículum</label><a class="cv-btn" href="' || new.cv_url || '" target="_blank">Descargar CV</a></div>' else '' end
+    <div class="field"><label>Nombre</label><p>' || private.html_escape(new.nombre) || '</p></div>
+    <div class="field"><label>Email</label><p><a href="mailto:' || private.html_escape(new.email) || '">' || private.html_escape(new.email) || '</a></p></div>'
+    || case when coalesce(new.telefono, '') != ''
+       then '<div class="field"><label>Teléfono</label><p>' || private.html_escape(new.telefono) || '</p></div>' else '' end
+    || case when coalesce(new.discapacidad, '') != ''
+       then '<div class="field"><label>Tipo de discapacidad</label><p>' || private.html_escape(new.discapacidad) || '</p></div>' else '' end
+    || case when coalesce(new.carta, '') != ''
+       then '<hr class="divider"><div class="field"><label>Carta de presentación</label><div class="carta">' || private.html_escape(new.carta) || '</div></div>' else '' end
+    || case when coalesce(new.cv_url, '') != ''
+       then '<hr class="divider"><div class="field"><label>Currículum</label><a class="cv-btn" href="' || private.html_escape(new.cv_url) || '" target="_blank">Descargar CV</a></div>' else '' end
     || '
   </div>
   <div class="footer">Este mensaje ha sido enviado automáticamente por IncluJob · <a href="https://inclujob.es">inclujob.es</a></div>
 </div>
 </body></html>';
 
-  -- Llamada HTTP a Resend via pg_net
   perform net.http_post(
     url     := 'https://api.resend.com/emails',
     headers := jsonb_build_object(
@@ -121,7 +146,7 @@ begin
     ),
     body    := jsonb_build_object(
       'from',    v_from_email,
-      'to',      array['sergi.martin.2003@gmail.com'],
+      'to',      array[v_admin_email],
       'subject', v_subject,
       'html',    v_email_body
     )

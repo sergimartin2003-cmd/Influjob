@@ -688,9 +688,13 @@
     Sin configurar, el formulario abre el cliente de correo como fallback.
   -->
   <script>
+  // DOMContentLoaded se dispara después de que los scripts `defer` hayan corrido,
+  // garantizando que window.__BRAND__ (de manifest.js) ya está disponible.
+  document.addEventListener("DOMContentLoaded", function () {
   (function () {
-    var SB_URL = "https://kqrzdyxziystnsczalus.supabase.co";
-    var SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcnpkeXh6aXlzdG5zY3phbHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzkyMTUsImV4cCI6MjA5NDg1NTIxNX0.9vJRL0AN-u56Qs_DlbI7N-QMddkR6XIj3thRrWkxTEw";
+    var _sb    = (window.__BRAND__ && window.__BRAND__.supabase) || {};
+    var SB_URL = _sb.url || "";
+    var SB_KEY = _sb.key || "";
 
     var form      = document.getElementById("offer-form");
     var successEl = document.getElementById("form-success");
@@ -746,9 +750,9 @@
       return {
         empresa:            fd.get("empresa")            || "",
         web_empresa:        fd.get("web_empresa")        || "",
-        nombre_contacto:    fd.get("nombre_contacto")   || "",
-        email_contacto:     fd.get("email_contacto")    || "",
-        telefono_contacto:  fd.get("telefono_contacto") || "",
+        nombre_contacto:    fd.get("contacto_nombre")    || "",
+        email_contacto:     fd.get("contacto_email")    || "",
+        telefono_contacto:  fd.get("contacto_telefono") || "",
         puesto:             fd.get("puesto")             || "",
         ciudad:             fd.get("ciudad")             || "",
         modalidad:          fd.get("modalidad")          || "",
@@ -809,6 +813,7 @@
     });
 
   })();
+  });
   </script>
 
 </body>

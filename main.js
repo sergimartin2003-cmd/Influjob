@@ -879,7 +879,7 @@
     const form = $(".newsletter-form");
     if (!form) return;
 
-    form.addEventListener("submit", e => {
+    form.addEventListener("submit", async e => {
       e.preventDefault();
       if (!form.reportValidity()) return;
 
@@ -892,19 +892,49 @@
       if (btnLoad) btnLoad.hidden = false;
       if (btn) btn.disabled = true;
 
-      setTimeout(() => {
-        if (btnLoad) btnLoad.hidden = true;
+      const fd = new FormData(form);
+      const payload = {
+        email:      fd.get("email") || "",
+        nombre:     fd.get("nombre") || "",
+        frecuencia: fd.get("frecuencia") || "semanal",
+        ciudades:   fd.getAll("ciudades").join(", "),
+        sectores:   fd.getAll("sectores").join(", ")
+      };
+
+      let ok = false;
+      if (SB_URL && SB_KEY) {
+        try {
+          const res = await fetch(SB_URL + "/rest/v1/newsletter_subscribers", {
+            method: "POST",
+            headers: sbHeaders({ "Prefer": "return=minimal" }),
+            body: JSON.stringify(payload)
+          });
+          ok = res.ok || res.status === 409; // 409 = email ya suscrito, también es éxito
+        } catch (_) {
+          ok = false;
+        }
+      }
+
+      if (btnLoad) btnLoad.hidden = true;
+
+      if (ok) {
         if (btnOk)   btnOk.hidden = false;
         if (btn) btn.style.background = "var(--green-dark)";
-
-        // Allow re-submit after 4s in case user made a mistake
         setTimeout(() => {
           if (btnText) btnText.hidden = false;
           if (btnOk)   btnOk.hidden = true;
           if (btn) { btn.disabled = false; btn.style.background = ""; }
           form.reset();
         }, 4000);
-      }, 1500);
+      } else {
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.hidden = false;
+        const errEl = form.querySelector(".nl-error") || document.createElement("p");
+        errEl.className = "nl-error";
+        errEl.style.cssText = "color:#ef4444;margin-top:.5rem;font-size:.875rem";
+        errEl.textContent = "Error al suscribirse. Inténtalo de nuevo.";
+        if (!form.querySelector(".nl-error")) form.appendChild(errEl);
+      }
     });
   }
 
