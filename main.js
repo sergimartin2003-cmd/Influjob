@@ -18,10 +18,13 @@
   const SB_URL = (data.supabase && data.supabase.url) || "";
   const SB_KEY = (data.supabase && data.supabase.key) || "";
 
+  // Con las claves nuevas de Supabase (sb_publishable_…) la clave va SOLO en
+  // "apikey". Ponerla en Authorization: Bearer haría que la tratasen como un
+  // JWT y rechazaran la petición ("Invalid JWT"). Estas llamadas son anónimas,
+  // así que no lleva Authorization.
   function sbHeaders(extra) {
     return Object.assign({
       "apikey": SB_KEY,
-      "Authorization": "Bearer " + SB_KEY,
       "Content-Type": "application/json"
     }, extra || {});
   }
@@ -716,7 +719,6 @@
               method: "POST",
               headers: {
                 "apikey": SB_KEY,
-                "Authorization": "Bearer " + SB_KEY,
                 "Content-Type": file.type || "application/octet-stream"
               },
               body: file

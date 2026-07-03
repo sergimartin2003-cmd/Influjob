@@ -23,11 +23,12 @@ if not SB_KEY:
 ADZUNA_ID  = "bef3158f"
 ADZUNA_KEY = "a5e39157fcf4336140585f0ca2d2c722"
 
+# Con las claves nuevas de Supabase (sb_secret_…) la clave va SOLO en "apikey";
+# en Authorization: Bearer la interpretarían como JWT y la rechazarían.
 SB_HEADERS = {
-    "apikey":        SB_KEY,
-    "Authorization": f"Bearer {SB_KEY}",
-    "Content-Type":  "application/json",
-    "Prefer":        "return=minimal"
+    "apikey":       SB_KEY,
+    "Content-Type": "application/json",
+    "Prefer":       "return=minimal"
 }
 
 STRONG_KEYWORDS = [

@@ -789,14 +789,18 @@
       function sendOffer(accessToken, companyId) {
         var payload = buildPayload(fd);
         if (companyId) payload.company_id = companyId;
+        // Clave nueva (sb_publishable_…): va solo en "apikey". Authorization
+        // solo se envía si hay sesión (con el JWT real del usuario); si no,
+        // enviar la clave publishable como Bearer daría "Invalid JWT".
+        var headers = {
+          "apikey":       cfg.key,
+          "Content-Type": "application/json",
+          "Prefer":       "return=minimal"
+        };
+        if (accessToken) headers["Authorization"] = "Bearer " + accessToken;
         fetch(cfg.url + "/rest/v1/jobs", {
           method: "POST",
-          headers: {
-            "apikey":        cfg.key,
-            "Authorization": "Bearer " + (accessToken || cfg.key),
-            "Content-Type":  "application/json",
-            "Prefer":        "return=minimal"
-          },
+          headers: headers,
           body: JSON.stringify(payload)
         })
         .then(function(res) {
