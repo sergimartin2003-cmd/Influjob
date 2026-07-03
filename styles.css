@@ -2162,3 +2162,96 @@ body[data-theme="dark"] { background: #111827; color: var(--ink); }
 
 /* Modal overlay */
 [data-theme="dark"] .modal-overlay { background: rgba(0,0,0,.75); }
+
+/* =============================================================
+   19. Acceso empresas (Supabase Auth) — lib/auth.js
+   ============================================================= */
+.nav-login {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .55rem 1.1rem;
+  font-size: .85rem;
+  margin-inline-start: .75rem;
+  flex-shrink: 0;
+}
+.nav-login #auth-btn-label {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav-login.is-logged {
+  border-color: var(--green-dark);
+  color: var(--green-dark);
+}
+.nav-login.is-logged:hover {
+  background: var(--green-dark);
+  color: var(--white);
+}
+@media (max-width: 959px) { .nav-login { display: none !important; } }
+
+.auth-mobile-btn {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: .45rem;
+  margin-bottom: .6rem;
+}
+@media (min-width: 960px) { .auth-mobile-btn { display: none !important; } }
+
+.auth-modal { width: min(460px, 94vw); }
+
+.auth-inner {
+  position: relative;
+  padding: 2.5rem 2rem 2rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.auth-title { font-size: 1.35rem; font-weight: 800; margin-bottom: .3rem; }
+.auth-sub   { font-size: .88rem; color: var(--gray-500); margin-bottom: 1.25rem; }
+
+.auth-alert {
+  background: #fdecec;
+  color: #b3261e;
+  border-radius: var(--radius-sm);
+  padding: .7rem .9rem;
+  font-size: .85rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+.auth-alert--ok { background: var(--green-pale); color: var(--green-dark); }
+[data-theme="dark"] .auth-alert { background: #3a1a1a; color: #ff9d92; }
+[data-theme="dark"] .auth-alert--ok { background: var(--green-pale); color: #5ae09a; }
+
+.auth-view:not([hidden]) { display: flex; flex-direction: column; gap: 1rem; }
+
+.auth-submit {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: .25rem;
+}
+
+.auth-switch {
+  font-size: .85rem;
+  color: var(--gray-500);
+  text-align: center;
+  margin-top: .5rem;
+}
+.auth-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+  font-weight: 700;
+  color: var(--blue-mid);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.auth-link:hover { color: var(--blue-deep); }
+[data-theme="dark"] .auth-link { color: #90c0f8; }
+[data-theme="dark"] .auth-link:hover { color: var(--white); }
+
+.auth-account-meta { margin-bottom: .5rem; }

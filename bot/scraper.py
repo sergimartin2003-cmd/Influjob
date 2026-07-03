@@ -3,6 +3,7 @@ IncluJob — Bot de scraping via Adzuna API (España)
 Busca ofertas para personas con discapacidad y las sube a Supabase
 """
 
+import os
 import sys
 import re
 import hashlib
@@ -11,8 +12,13 @@ from datetime import datetime
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-SB_URL = "https://kqrzdyxziystnsczalus.supabase.co"
-SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcnpkeXh6aXlzdG5zY3phbHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzkyMTUsImV4cCI6MjA5NDg1NTIxNX0.9vJRL0AN-u56Qs_DlbI7N-QMddkR6XIj3thRrWkxTEw"
+SB_URL = "https://pcvfwlbefnwwexhaenph.supabase.co"
+# Clave service_role del proyecto (Dashboard → Project Settings → API Keys).
+# Llega como secreto SUPABASE_SERVICE_KEY desde GitHub Actions — nunca hardcodearla.
+SB_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
+
+if not SB_KEY:
+    sys.exit("Falta la variable de entorno SUPABASE_SERVICE_KEY (secreto de GitHub Actions)")
 
 ADZUNA_ID  = "bef3158f"
 ADZUNA_KEY = "a5e39157fcf4336140585f0ca2d2c722"

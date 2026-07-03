@@ -676,8 +676,10 @@
 
   <script defer src="lib/gsap.min.js?v=20260521"></script>
   <script defer src="lib/ScrollTrigger.min.js?v=20260521"></script>
-  <script defer src="lib/manifest.js?v=20260522"></script>
-  <script defer src="main.js?v=20260522"></script>
+  <script defer src="lib/manifest.js?v=20260702"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script defer src="lib/auth.js?v=20260702"></script>
+  <script defer src="main.js?v=20260702"></script>
 
   <!--
     CONFIGURACIÓN DEL FORMULARIO:
@@ -689,8 +691,12 @@
   -->
   <script>
   (function () {
-    var SB_URL = "https://kqrzdyxziystnsczalus.supabase.co";
-    var SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcnpkeXh6aXlzdG5zY3phbHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzkyMTUsImV4cCI6MjA5NDg1NTIxNX0.9vJRL0AN-u56Qs_DlbI7N-QMddkR6XIj3thRrWkxTEw";
+    // Config centralizada en lib/manifest.js (window.__BRAND__.supabase).
+    // manifest.js se carga con defer, así que se lee en el momento del envío.
+    function sbConfig() {
+      var sb = (window.__BRAND__ && window.__BRAND__.supabase) || {};
+      return { url: sb.url || "", key: sb.key || "" };
+    }
 
     var form      = document.getElementById("offer-form");
     var successEl = document.getElementById("form-success");
@@ -777,21 +783,37 @@
       submitBtn.setAttribute("aria-busy", "true");
       submitBtn.textContent = "Enviando…";
 
-      fetch(SB_URL + "/rest/v1/jobs", {
-        method: "POST",
-        headers: {
-          "apikey":        SB_KEY,
-          "Authorization": "Bearer " + SB_KEY,
-          "Content-Type":  "application/json",
-          "Prefer":        "return=minimal"
-        },
-        body: JSON.stringify(buildPayload(fd))
-      })
-      .then(function(res) {
-        if (res.ok) { showSuccess(); }
-        else { showError(); }
-      })
-      .catch(function() { showError(); });
+      var cfg = sbConfig();
+      if (!cfg.url || !cfg.key) { showError(); return; }
+
+      function sendOffer(accessToken, companyId) {
+        var payload = buildPayload(fd);
+        if (companyId) payload.company_id = companyId;
+        fetch(cfg.url + "/rest/v1/jobs", {
+          method: "POST",
+          headers: {
+            "apikey":        cfg.key,
+            "Authorization": "Bearer " + (accessToken || cfg.key),
+            "Content-Type":  "application/json",
+            "Prefer":        "return=minimal"
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(function(res) {
+          if (res.ok) { showSuccess(); }
+          else { showError(); }
+        })
+        .catch(function() { showError(); });
+      }
+
+      // Si la empresa ha iniciado sesión, la oferta queda ligada a su cuenta
+      if (window.IncloAuth && window.IncloAuth.getSession) {
+        window.IncloAuth.getSession().then(function(session) {
+          sendOffer(session && session.access_token, session && session.user && session.user.id);
+        }).catch(function() { sendOffer(null, null); });
+      } else {
+        sendOffer(null, null);
+      }
     });
 
     retryBtn && retryBtn.addEventListener("click", function () {
@@ -806,6 +828,23 @@
         e.target.style.borderColor = "";
         e.target.removeAttribute("aria-invalid");
       }
+    });
+
+    // Si la empresa ha iniciado sesión, precarga sus datos en el formulario
+    // (lib/auth.js emite este evento con la fila de public.companies)
+    document.addEventListener("incloo:session", function (e) {
+      var c = e.detail && e.detail.company;
+      if (!c) return;
+      var map = {
+        empresa:           c.nombre,
+        email_contacto:    c.email,
+        telefono_contacto: c.telefono,
+        web_empresa:       c.web
+      };
+      Object.keys(map).forEach(function (name) {
+        var el = form.querySelector("[name='" + name + "']");
+        if (el && !el.value && map[name]) el.value = map[name];
+      });
     });
 
   })();
