@@ -26,8 +26,14 @@ create table if not exists public.companies (
   telefono    text,
   web         text,
   sector      text,
-  descripcion text
+  descripcion text,
+  nif         text,                       -- CIF / NIF de la empresa
+  nif_valido  boolean not null default false  -- lo fija el servidor (checksum oficial)
 );
+
+-- Por si la tabla ya existía de una ejecución anterior
+alter table public.companies add column if not exists nif        text;
+alter table public.companies add column if not exists nif_valido boolean not null default false;
 
 alter table public.companies enable row level security;
 
@@ -50,6 +56,84 @@ create policy "Empresa actualiza su perfil"
   using (auth.uid() = id)
   with check (auth.uid() = id);
 
+-- VERIFICACIÓN FISCAL: valida el dígito de control oficial de un documento
+-- español (CIF de empresa, NIF/DNI de autónomo o NIE). Devuelve true solo si
+-- el checksum es correcto. Es determinista, así que se ejecuta en el servidor
+-- y el cliente NO puede falsear el resultado.
+create or replace function public.es_nif_valido(doc text)
+returns boolean
+language plpgsql
+immutable
+as $$
+declare
+  v     text := upper(regexp_replace(coalesce(doc, ''), '[\s\-\.]', '', 'g'));
+  letras text := 'TRWAGMYFPDXBNJZSQVHLCKE';
+  org   text;
+  digs  text;
+  ctrl  text;
+  s     int := 0;
+  n     int;
+  i     int;
+  e     int;
+  letra_ctrl text;
+begin
+  -- DNI / NIF autónomo: 8 dígitos + letra de control
+  if v ~ '^[0-9]{8}[A-Z]$' then
+    return substr(letras, ((substr(v, 1, 8))::int % 23) + 1, 1) = substr(v, 9, 1);
+  end if;
+
+  -- NIE: X/Y/Z + 7 dígitos + letra
+  if v ~ '^[XYZ][0-9]{7}[A-Z]$' then
+    return substr(letras,
+      ((translate(substr(v, 1, 1), 'XYZ', '012') || substr(v, 2, 7))::int % 23) + 1, 1)
+      = substr(v, 9, 1);
+  end if;
+
+  -- CIF de empresa: letra + 7 dígitos + control (dígito o letra)
+  if v ~ '^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$' then
+    org  := substr(v, 1, 1);
+    digs := substr(v, 2, 7);
+    ctrl := substr(v, 9, 1);
+    for i in 1..7 loop
+      n := substr(digs, i, 1)::int;
+      if i % 2 = 1 then          -- posiciones impares se multiplican por 2
+        n := n * 2;
+        if n > 9 then n := (n / 10) + (n % 10); end if;
+      end if;
+      s := s + n;
+    end loop;
+    e := (10 - (s % 10)) % 10;
+    letra_ctrl := substr('JABCDEFGHI', e + 1, 1);
+    if position(org in 'PQRSNW') > 0 then
+      return ctrl = letra_ctrl;              -- estas formas usan letra
+    elsif position(org in 'ABEH') > 0 then
+      return ctrl = e::text;                 -- estas usan dígito
+    else
+      return ctrl = e::text or ctrl = letra_ctrl;  -- el resto acepta cualquiera
+    end if;
+  end if;
+
+  return false;
+end;
+$$;
+
+-- Recalcula nif_valido en el servidor cada vez que se guarda la empresa,
+-- ignorando cualquier valor que mande el cliente (no se puede falsear).
+create or replace function public.set_nif_valido()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.nif_valido := public.es_nif_valido(new.nif);
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_set_nif_valido on public.companies;
+create trigger trg_set_nif_valido
+  before insert or update on public.companies
+  for each row execute function public.set_nif_valido();
+
 -- Al registrarse un usuario, se crea automáticamente su ficha de empresa
 -- con los datos que rellenó en el formulario de registro (metadata del signup)
 create or replace function public.handle_new_user()
@@ -59,14 +143,15 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.companies (id, nombre, email, telefono, web, sector)
+  insert into public.companies (id, nombre, email, telefono, web, sector, nif)
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'empresa', ''),
     new.email,
     coalesce(new.raw_user_meta_data->>'telefono', ''),
     coalesce(new.raw_user_meta_data->>'web', ''),
-    coalesce(new.raw_user_meta_data->>'sector', '')
+    coalesce(new.raw_user_meta_data->>'sector', ''),
+    coalesce(new.raw_user_meta_data->>'nif', '')
   )
   on conflict (id) do nothing;
   return new;
@@ -166,12 +251,20 @@ create policy "Cualquiera puede enviar oferta"
   to anon
   with check (fuente is null and company_id is null);
 
--- Empresa registrada publica ofertas ligadas a su cuenta
+-- Empresa registrada publica ofertas ligadas a su cuenta.
+-- Solo si su CIF/NIF ha superado la verificación fiscal (nif_valido = true).
 drop policy if exists "Empresa publica sus ofertas" on public.jobs;
 create policy "Empresa publica sus ofertas"
   on public.jobs for insert
   to authenticated
-  with check (fuente is null and company_id = auth.uid());
+  with check (
+    fuente is null
+    and company_id = auth.uid()
+    and exists (
+      select 1 from public.companies c
+      where c.id = auth.uid() and c.nif_valido
+    )
+  );
 
 -- Todo el mundo ve solo las ofertas publicadas
 drop policy if exists "Solo ofertas publicadas son visibles" on public.jobs;
