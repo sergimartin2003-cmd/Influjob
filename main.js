@@ -228,7 +228,19 @@
 
     const emptyEl  = $("#jobs-empty");
     const loadMore = $("#jobs-load-more");
-    if (emptyEl)  emptyEl.hidden  = totalMatches > 0;
+    if (emptyEl) {
+      emptyEl.hidden = totalMatches > 0;
+      // Mensaje distinto según haya cero ofertas en total o solo cero con filtros
+      const msgEl   = emptyEl.querySelector("p");
+      const emptyBtn = emptyEl.querySelector("[data-reset-filters]");
+      if (cards.length === 0) {
+        if (msgEl) msgEl.textContent = "Aún no hay ofertas publicadas. Vuelve pronto o publica la tuya.";
+        if (emptyBtn) emptyBtn.hidden = true;
+      } else {
+        if (msgEl) msgEl.textContent = "No hay ofertas con estos filtros.";
+        if (emptyBtn) emptyBtn.hidden = false;
+      }
+    }
     if (loadMore) {
       loadMore.hidden = totalMatches <= currentShownCount;
       const hint = $(".jobs-load-hint");
@@ -1007,7 +1019,21 @@
       sbGet("jobs?estado=eq.publicada&order=created_at.desc&limit=500")
         .then(function(rows) {
           fetchInFlight = false;
-          if (!rows || !rows.length) return;
+          if (!rows || !rows.length) {
+            // No hay ofertas reales publicadas todavía: dejar el tablón vacío
+            liveJobs = [];
+            data.jobs = [];
+            var emptyGrid = $("[data-jobs]");
+            if (emptyGrid) emptyGrid.innerHTML = "";
+            var rc = $("[data-results-count]");
+            if (rc) rc.textContent = "0";
+            var sc = $("[data-count-to]");
+            if (sc) { sc.setAttribute("data-count-to", "0"); sc.textContent = "0"; }
+            var bb = $(".bot-badge");
+            if (bb) bb.style.display = "none";
+            applyFilters();
+            return;
+          }
 
           // Empresas y patrones bloqueados en cliente (falsos positivos del bot)
           var BLOCKED_COMPANIES = ["veterinary staff", "the vet office", "gmail"];
