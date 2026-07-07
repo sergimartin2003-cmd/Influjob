@@ -252,7 +252,8 @@ create policy "Cualquiera puede enviar oferta"
   with check (fuente is null and company_id is null);
 
 -- Empresa registrada publica ofertas ligadas a su cuenta.
--- Solo si su CIF/NIF ha superado la verificación fiscal (nif_valido = true).
+-- La verificación fiscal (nif_valido) es OPCIONAL: no bloquea la publicación,
+-- solo sirve como sello de confianza en la ficha de la empresa.
 drop policy if exists "Empresa publica sus ofertas" on public.jobs;
 create policy "Empresa publica sus ofertas"
   on public.jobs for insert
@@ -260,10 +261,6 @@ create policy "Empresa publica sus ofertas"
   with check (
     fuente is null
     and company_id = auth.uid()
-    and exists (
-      select 1 from public.companies c
-      where c.id = auth.uid() and c.nif_valido
-    )
   );
 
 -- Todo el mundo ve solo las ofertas publicadas
