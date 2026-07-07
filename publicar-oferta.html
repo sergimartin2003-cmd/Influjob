@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="styles.css?v=20260704">
+  <link rel="stylesheet" href="styles.css?v=20260705">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a3a6b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%232ecc71' font-family='sans-serif' font-weight='bold'>IJ</text></svg>">
   <style>
     /* ── Publicar oferta page ── */
@@ -197,6 +197,28 @@
     .form-error p { color: var(--gray-500); max-width: 380px; }
     .form-error a { color: var(--blue-mid); text-decoration: underline; }
 
+    /* Candado de sesión */
+    .login-gate {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .9rem;
+      padding: 3rem 2rem;
+    }
+    .login-gate-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--blue-pale);
+      color: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-gate h2 { font-size: 1.3rem; color: var(--ink); border: 0; padding: 0; margin: 0; }
+    .login-gate p { color: var(--gray-500); max-width: 400px; }
+    .login-gate .btn-submit { width: auto; padding: .8rem 1.8rem; margin-top: .4rem; }
+
     /* Sidebar */
     .offer-sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
     .sidebar-card {
@@ -334,8 +356,18 @@
 
       <!-- ── FORM ── -->
       <div>
-        <!-- Form visible / success / error states -->
-        <div id="offer-form-wrap">
+        <!-- Candado: hay que iniciar sesión como empresa para poder publicar -->
+        <div class="offer-form-card login-gate" id="login-gate">
+          <div class="login-gate-icon" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <h2>Inicia sesión para publicar</h2>
+          <p>Para publicar una oferta necesitas una cuenta de empresa. Es gratis y solo tarda un minuto.</p>
+          <button type="button" class="btn-submit" id="login-gate-btn">Acceder / Registrar empresa</button>
+        </div>
+
+        <!-- Form visible / success / error states (oculto hasta iniciar sesión) -->
+        <div id="offer-form-wrap" hidden>
 
           <form id="offer-form" novalidate>
 
@@ -676,10 +708,10 @@
 
   <script defer src="lib/gsap.min.js?v=20260521"></script>
   <script defer src="lib/ScrollTrigger.min.js?v=20260521"></script>
-  <script defer src="lib/manifest.js?v=20260704"></script>
+  <script defer src="lib/manifest.js?v=20260705"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script defer src="lib/auth.js?v=20260704"></script>
-  <script defer src="main.js?v=20260704"></script>
+  <script defer src="lib/auth.js?v=20260705"></script>
+  <script defer src="main.js?v=20260705"></script>
 
   <!--
     CONFIGURACIÓN DEL FORMULARIO:
@@ -834,9 +866,29 @@
       }
     });
 
-    // Si la empresa ha iniciado sesión, precarga sus datos en el formulario
-    // (lib/auth.js emite este evento con la fila de public.companies)
+    // ── Candado de sesión ──────────────────────────────────────────────
+    // Solo las empresas con sesión iniciada pueden ver el formulario y publicar.
+    var gate     = document.getElementById("login-gate");
+    var formWrap = document.getElementById("offer-form-wrap");
+    var gateBtn  = document.getElementById("login-gate-btn");
+
+    function setLoggedIn(logged) {
+      if (gate)     gate.hidden     = logged;
+      if (formWrap) formWrap.hidden = !logged;
+    }
+
+    if (gateBtn) {
+      gateBtn.addEventListener("click", function () {
+        if (window.IncloAuth && window.IncloAuth.open) window.IncloAuth.open("login");
+      });
+    }
+
+    // Estado inicial y cambios de sesión (lib/auth.js emite este evento).
     document.addEventListener("incloo:session", function (e) {
+      var session = e.detail && e.detail.session;
+      setLoggedIn(!!session);
+
+      // Si hay sesión, precarga los datos de la empresa en el formulario
       var c = e.detail && e.detail.company;
       if (!c) return;
       var map = {
@@ -850,6 +902,11 @@
         if (el && !el.value && map[name]) el.value = map[name];
       });
     });
+
+    // Red de seguridad: si auth.js ya cargó antes de este script, comprueba ya
+    if (window.IncloAuth && window.IncloAuth.getSession) {
+      window.IncloAuth.getSession().then(function (s) { setLoggedIn(!!s); });
+    }
 
   })();
   </script>

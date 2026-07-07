@@ -243,13 +243,10 @@ create trigger trg_auto_approve_job
 -- Row Level Security
 alter table public.jobs enable row level security;
 
--- Visitante anónimo puede enviar una oferta desde el formulario
--- (no puede hacerse pasar por el bot ni por una empresa registrada)
+-- Publicar una oferta EXIGE iniciar sesión como empresa: no hay política de
+-- inserción para el rol anónimo, así que un visitante sin cuenta no puede
+-- crear ofertas (ni desde la web ni llamando a la API directamente).
 drop policy if exists "Cualquiera puede enviar oferta" on public.jobs;
-create policy "Cualquiera puede enviar oferta"
-  on public.jobs for insert
-  to anon
-  with check (fuente is null and company_id is null);
 
 -- Empresa registrada publica ofertas ligadas a su cuenta.
 -- La verificación fiscal (nif_valido) es OPCIONAL: no bloquea la publicación,
