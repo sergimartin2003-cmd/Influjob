@@ -809,7 +809,10 @@
         certificado_minimo: fd.get("certificado_minimo") || "",
         discapacidad_tipos: discapacidadTipos.join(", "),
         ajustes_razonables: fd.get("ajustes_razonables") || "",
-        estado:             "pendiente"
+        // Publicada directamente: solo empresas con sesión pueden llegar aquí
+        // (la política RLS lo garantiza). Si existe el trigger auto_approve_job
+        // este valor lo recalcula el servidor; si no, la oferta sale visible ya.
+        estado:             "publicada"
       };
     }
 
