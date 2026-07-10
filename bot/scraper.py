@@ -278,7 +278,34 @@ def search_jooble(query: str, page: int = 1) -> list:
 
 def insert_job(job: dict) -> bool:
     r = requests.post(f"{SB_URL}/rest/v1/jobs", headers=SB_HEADERS, json=job)
+    if not r.ok:
+        # Sin esto solo veríamos "ERROR al insertar" sin saber la causa real
+        print("      -> HTTP " + str(r.status_code) + ": " + (r.text or "")[:200])
     return r.ok
+
+
+def preflight() -> None:
+    """Comprueba que la SUPABASE_SERVICE_KEY es válida para ESTE proyecto antes
+    de scrapear. Si la clave es incorrecta (típico tras cambiar de proyecto),
+    la lectura/escritura devuelve 401/403 y aquí se ve claramente en el log."""
+    try:
+        r = requests.get(
+            f"{SB_URL}/rest/v1/jobs",
+            headers={**SB_HEADERS, "Prefer": ""},
+            params={"select": "id", "limit": "1"},
+            timeout=20
+        )
+    except Exception as e:
+        print("Preflight: no se pudo conectar a Supabase: " + str(e))
+        return
+    print("Preflight (lectura tabla jobs): HTTP " + str(r.status_code))
+    if r.status_code in (401, 403):
+        print("  ⚠ La SUPABASE_SERVICE_KEY NO es válida para el proyecto "
+              + SB_URL + ".")
+        print("  ⚠ Actualiza el secreto SUPABASE_SERVICE_KEY con la clave "
+              "service_role (sb_secret_…) de este proyecto en:")
+        print("     GitHub → Settings → Secrets and variables → Actions.")
+        print("  Respuesta de Supabase: " + (r.text or "")[:300])
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
@@ -288,6 +315,8 @@ def main():
 
     print("Incloo — Agregador de ofertas externas - " + datetime.now().strftime("%Y-%m-%d %H:%M"))
     print("Fuentes activas: Adzuna" + (" + Jooble" if JOOBLE_KEY else ""))
+
+    preflight()
 
     seen_ids = set()
     total = 0
