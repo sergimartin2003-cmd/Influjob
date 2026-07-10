@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi empresa — Panel — Incloo</title>
+  <meta name="description" content="Panel de empresa de Incloo: gestiona tus ofertas, revisa candidaturas y edita los datos de tu empresa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css?v=20260710">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a3a6b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%232ecc71' font-family='sans-serif' font-weight='bold'>In</text></svg>">
+  <script id="ij-theme-init">(function(){var t=localStorage.getItem("ij-theme");var d=matchMedia("(prefers-color-scheme:dark)").matches;if(t==="dark"||(!t&&d))document.body.dataset.theme="dark";})()</script>
+  <style>
+    .pf-wrap { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* Cabecera de empresa */
+    .pf-head {
+      display: flex; align-items: center; gap: 1.25rem;
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+    .pf-logo {
+      position: relative; width: 84px; height: 84px; flex-shrink: 0;
+      border-radius: 18px; overflow: hidden; background: var(--blue-pale);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pf-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .pf-logo-ph { color: var(--blue-deep); font-weight: 800; font-size: 1.8rem; }
+    .pf-logo-edit {
+      position: absolute; inset: auto 0 0 0; height: 26px;
+      background: rgba(15,31,61,.72); color: #fff; border: 0; cursor: pointer;
+      font-size: .66rem; font-weight: 700; letter-spacing: .02em;
+      display: flex; align-items: center; justify-content: center; gap: .25rem;
+    }
+    .pf-head-main { flex: 1; min-width: 200px; }
+    .pf-head-main h1 { font-size: 1.5rem; color: var(--ink); margin: 0 0 .2rem; }
+    .pf-head-email { color: var(--gray-500); font-size: .9rem; }
+    .pf-badge {
+      display: inline-block; margin-top: .5rem; font-size: .72rem; font-weight: 700;
+      padding: .22rem .6rem; border-radius: 999px;
+    }
+    .pf-badge--ok { background: var(--green-pale); color: var(--green-dark); }
+    .pf-stats { display: flex; gap: 1.5rem; }
+    .pf-stat { text-align: center; }
+    .pf-stat b { display: block; font-size: 1.5rem; color: var(--blue-deep); font-weight: 800; }
+    .pf-stat span { font-size: .72rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: .04em; }
+
+    /* Pestañas */
+    .pf-tabs { display: flex; gap: .4rem; margin: 1.75rem 0 1.25rem; flex-wrap: wrap; }
+    .pf-tab {
+      background: var(--white); border: 1.5px solid var(--gray-200); color: var(--gray-700);
+      padding: .55rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: .88rem;
+      cursor: pointer; transition: all .15s;
+    }
+    .pf-tab:hover { border-color: var(--blue-mid); }
+    .pf-tab[aria-selected="true"] { background: var(--blue-deep); color: #fff; border-color: var(--blue-deep); }
+    .pf-panel[hidden] { display: none; }
+
+    /* Listas */
+    .pf-card {
+      background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius);
+      padding: 1.15rem 1.25rem; margin-bottom: .9rem;
+    }
+    .pf-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .pf-job-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: 0; }
+    .pf-job-meta { font-size: .82rem; color: var(--gray-500); margin-top: .25rem; display: flex; gap: .6rem; flex-wrap: wrap; }
+    .pf-pill { font-size: .68rem; font-weight: 700; padding: .18rem .55rem; border-radius: 999px; }
+    .pf-pill--pub { background: var(--green-pale); color: var(--green-dark); }
+    .pf-pill--pen { background: #fef3e2; color: #b05b00; }
+    .pf-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .pf-btn {
+      font-size: .78rem; font-weight: 600; padding: .45rem .8rem; border-radius: 8px;
+      cursor: pointer; border: 1.5px solid var(--gray-300); background: var(--white); color: var(--gray-700);
+    }
+    .pf-btn:hover { border-color: var(--blue-mid); color: var(--blue-deep); }
+    .pf-btn--danger { color: #c62828; border-color: #f3c9c9; }
+    .pf-btn--danger:hover { background: #fef2f2; border-color: #c62828; color: #c62828; }
+    .pf-btn--primary { background: var(--blue-deep); color: #fff; border-color: var(--blue-deep); }
+    .pf-btn--primary:hover { background: var(--blue-mid); color: #fff; }
+
+    .pf-app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: .4rem .9rem; margin: .6rem 0; }
+    .pf-app-grid dt { font-size: .66rem; text-transform: uppercase; letter-spacing: .04em; color: var(--gray-400); }
+    .pf-app-grid dd { font-size: .86rem; color: var(--ink); margin: 0 0 .3rem; word-break: break-word; }
+    .pf-app-carta { font-size: .86rem; color: var(--gray-700); background: var(--gray-100); border-radius: 10px; padding: .6rem .8rem; margin-top: .4rem; white-space: pre-wrap; }
+
+    .pf-empty { text-align: center; color: var(--gray-500); padding: 2.5rem 1rem; }
+    .pf-empty svg { opacity: .35; margin-bottom: .6rem; }
+
+    /* Formulario datos */
+    .pf-form { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 1.5rem; }
+    .pf-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 560px){ .pf-form .form-row { grid-template-columns: 1fr; } }
+    .pf-fg { margin-bottom: 1rem; }
+    .pf-fg label { display:block; font-size:.8rem; font-weight:600; color:var(--gray-700); margin-bottom:.3rem; }
+    .pf-fg input, .pf-fg textarea, .pf-fg select {
+      width:100%; padding:.6rem .85rem; border:1.5px solid var(--gray-300); border-radius:var(--radius-sm);
+      font:inherit; font-size:.9rem; color:var(--ink); background:var(--white);
+    }
+    .pf-fg textarea { min-height: 90px; resize: vertical; }
+    .pf-fg input:focus, .pf-fg textarea:focus, .pf-fg select:focus { outline:0; border-color:var(--blue-mid); box-shadow:0 0 0 3px rgba(42,82,152,.12); }
+
+    /* Toast */
+    .pf-toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: #fff; padding: .7rem 1.1rem; border-radius: 10px;
+      font-size: .88rem; font-weight: 600; box-shadow: var(--shadow-lg); opacity: 0;
+      transition: opacity .2s, transform .2s; z-index: 9999; pointer-events: none; max-width: 90vw;
+    }
+    .pf-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .pf-logout { margin-top: 1.5rem; }
+
+    [data-theme="dark"] .pf-head, [data-theme="dark"] .pf-card, [data-theme="dark"] .pf-form { background:#1a2540; border-color:#24314d; }
+    [data-theme="dark"] .pf-tab { background:#1a2540; border-color:#24314d; color:#c8d2e0; }
+    [data-theme="dark"] .pf-btn { background:#111827; border-color:#2d3a55; color:#c8d2e0; }
+    [data-theme="dark"] .pf-app-carta { background:#111827; }
+    [data-theme="dark"] .pf-fg input, [data-theme="dark"] .pf-fg textarea, [data-theme="dark"] .pf-fg select { background:#111827; border-color:#2d3a55; color:#e5e9f0; }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Saltar al contenido</a>
+
+  <div class="a11y-toolbar" role="toolbar" aria-label="Herramientas de accesibilidad">
+    <button type="button" class="a11y-btn" data-a11y="font-dec" aria-label="Reducir tamaño de fuente" title="Reducir fuente">A−</button>
+    <button type="button" class="a11y-btn" data-a11y="font-inc" aria-label="Aumentar tamaño de fuente" title="Aumentar fuente">A+</button>
+    <button type="button" class="a11y-btn" data-a11y="contrast" aria-label="Activar alto contraste" title="Alto contraste" aria-pressed="false">◑</button>
+    <button type="button" class="a11y-btn" data-a11y="dark-mode" aria-label="Activar modo oscuro" title="Modo oscuro" aria-pressed="false">☾</button>
+  </div>
+
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Incloo — Ir a inicio">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="8" fill="#1a3a6b"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#2ecc71" font-family="sans-serif" font-weight="800">In</text></svg>
+        <span>Incloo</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html#empleos" class="nav-link">Empleos</a></li>
+          <li><a href="index.html#otras-plataformas" class="nav-link">Otras plataformas</a></li>
+          <li><a href="index.html#como-funciona" class="nav-link">Cómo funciona</a></li>
+          <li><a href="index.html#empresas" class="nav-link">Empresas</a></li>
+        </ul>
+      </nav>
+      <a href="publicar-oferta.html" class="btn btn-primary nav-cta">Publicar oferta</a>
+      <button type="button" class="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-mobile">
+        <span class="burger-bar"></span><span class="burger-bar"></span><span class="burger-bar"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile" hidden aria-label="Menú móvil">
+      <ul role="list">
+        <li><a href="index.html#empleos" class="nav-link">Empleos</a></li>
+        <li><a href="index.html#otras-plataformas" class="nav-link">Otras plataformas</a></li>
+        <li><a href="index.html#como-funciona" class="nav-link">Cómo funciona</a></li>
+        <li><a href="index.html#empresas" class="nav-link">Empresas</a></li>
+      </ul>
+      <a href="publicar-oferta.html" class="btn btn-primary">Publicar oferta</a>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div class="page-header">
+      <div class="container">
+        <p class="page-eyebrow">Empresas</p>
+        <h1>Mi empresa</h1>
+        <p>Gestiona tus ofertas, revisa las candidaturas recibidas y edita tus datos.</p>
+      </div>
+    </div>
+
+    <div class="pf-wrap">
+
+      <!-- Candado: solo empresas con sesión -->
+      <div class="pf-card login-gate" id="profile-gate" style="text-align:center;padding:3rem 2rem;">
+        <div class="login-gate-icon" aria-hidden="true" style="margin:0 auto;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <h2 style="margin:.75rem 0 .3rem;">Inicia sesión para ver tu panel</h2>
+        <p style="color:var(--gray-500);max-width:420px;margin:0 auto 1rem;">Necesitas una cuenta de empresa para acceder a tu perfil, ofertas y candidaturas.</p>
+        <button type="button" class="btn btn-primary" id="profile-gate-btn">Acceder / Registrar empresa</button>
+      </div>
+
+      <!-- Panel (visible con sesión) -->
+      <div id="profile-wrap" hidden>
+
+        <!-- Cabecera empresa -->
+        <div class="pf-head">
+          <div class="pf-logo">
+            <img id="pf-logo-img" alt="Logo de la empresa" hidden>
+            <span class="pf-logo-ph" id="pf-logo-ph" aria-hidden="true">In</span>
+            <button type="button" class="pf-logo-edit" id="pf-logo-btn" aria-label="Cambiar foto de perfil">Cambiar</button>
+            <input type="file" id="pf-logo-input" accept="image/*" hidden>
+          </div>
+          <div class="pf-head-main">
+            <h1 id="pf-name">Tu empresa</h1>
+            <div class="pf-head-email" id="pf-email">—</div>
+            <span class="pf-badge" id="pf-badge" hidden></span>
+          </div>
+          <div class="pf-stats">
+            <div class="pf-stat"><b id="pf-stat-jobs">0</b><span>Ofertas</span></div>
+            <div class="pf-stat"><b id="pf-stat-apps">0</b><span>Candidaturas</span></div>
+          </div>
+        </div>
+
+        <!-- Pestañas -->
+        <div class="pf-tabs" role="tablist" aria-label="Secciones del panel">
+          <button class="pf-tab" role="tab" aria-selected="true"  data-tab="ofertas">Mis ofertas</button>
+          <button class="pf-tab" role="tab" aria-selected="false" data-tab="candidaturas">Candidaturas</button>
+          <button class="pf-tab" role="tab" aria-selected="false" data-tab="datos">Datos de la empresa</button>
+        </div>
+
+        <!-- Panel: ofertas -->
+        <section class="pf-panel" id="panel-ofertas" role="tabpanel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem;">
+            <p style="color:var(--gray-500);font-size:.9rem;margin:0;">Tus ofertas publicadas. Puedes despublicarlas o eliminarlas.</p>
+            <a href="publicar-oferta.html" class="pf-btn pf-btn--primary">+ Nueva oferta</a>
+          </div>
+          <div id="pf-jobs-list"></div>
+        </section>
+
+        <!-- Panel: candidaturas -->
+        <section class="pf-panel" id="panel-candidaturas" role="tabpanel" hidden>
+          <p style="color:var(--gray-500);font-size:.9rem;margin:0 0 .9rem;">Personas que se han inscrito a tus ofertas.</p>
+          <div id="pf-apps-list"></div>
+        </section>
+
+        <!-- Panel: datos empresa -->
+        <section class="pf-panel" id="panel-datos" role="tabpanel" hidden>
+          <form class="pf-form" id="pf-company-form" novalidate>
+            <div class="form-row">
+              <div class="pf-fg"><label for="cf-nombre">Nombre de la empresa</label><input type="text" id="cf-nombre" autocomplete="organization"></div>
+              <div class="pf-fg"><label for="cf-nif">CIF / NIF <span style="color:var(--gray-400);font-weight:400;">(opcional)</span></label><input type="text" id="cf-nif" maxlength="9"></div>
+            </div>
+            <div class="form-row">
+              <div class="pf-fg"><label for="cf-email">Email de contacto</label><input type="email" id="cf-email" autocomplete="email"></div>
+              <div class="pf-fg"><label for="cf-telefono">Teléfono</label><input type="tel" id="cf-telefono" autocomplete="tel"></div>
+            </div>
+            <div class="form-row">
+              <div class="pf-fg"><label for="cf-web">Página web</label><input type="url" id="cf-web" placeholder="https://…"></div>
+              <div class="pf-fg"><label for="cf-sector">Sector</label><input type="text" id="cf-sector"></div>
+            </div>
+            <div class="pf-fg"><label for="cf-descripcion">Descripción de la empresa</label><textarea id="cf-descripcion" placeholder="Cuéntanos a qué se dedica tu empresa y su compromiso con la inclusión…"></textarea></div>
+            <button type="submit" class="pf-btn pf-btn--primary" id="cf-save">Guardar cambios</button>
+          </form>
+
+          <div class="pf-logout">
+            <button type="button" class="pf-btn" id="pf-logout-btn">Cerrar sesión</button>
+          </div>
+        </section>
+
+      </div><!-- /profile-wrap -->
+    </div>
+  </main>
+
+  <div class="pf-toast" id="pf-toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script defer src="lib/manifest.js?v=20260710"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script defer src="lib/auth.js?v=20260710"></script>
+  <script defer src="main.js?v=20260710"></script>
+  <script>
+  (function () {
+    "use strict";
+    var $ = function (s, sc) { return (sc || document).querySelector(s); };
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); };
+
+    var gate = $("#profile-gate");
+    var wrap = $("#profile-wrap");
+    var session = null;
+
+    function client() { return window.IncloAuth && window.IncloAuth.client; }
+
+    var toastT;
+    function toast(msg) {
+      var el = $("#pf-toast"); if (!el) return;
+      el.textContent = msg; el.classList.add("show");
+      clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("show"); }, 3600);
+    }
+
+    function fmtDate(iso) { try { return new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" }); } catch (e) { return ""; } }
+    function setVal(id, v) { var el = $("#" + id); if (el) el.value = v || ""; }
+
+    function setLogged(s) {
+      session = s;
+      if (gate) gate.hidden = !!s;
+      if (wrap) wrap.hidden = !s;
+      if (s) loadAll();
+    }
+
+    /* ── Carga de datos ── */
+    function loadAll() {
+      var c = client(); if (!c || !session) return;
+      var uid = session.user.id;
+
+      c.from("companies").select("*").eq("id", uid).maybeSingle().then(function (r) {
+        renderCompany((r && r.data) || {});
+      });
+      c.from("jobs").select("*").eq("company_id", uid).order("created_at", { ascending: false }).then(function (r) {
+        renderJobs((r && r.data) || []);
+      });
+      c.from("applications").select("*").order("created_at", { ascending: false }).then(function (r) {
+        renderApps((r && r.data) || []);
+      });
+    }
+
+    function renderCompany(c) {
+      $("#pf-name").textContent = c.nombre || "Tu empresa";
+      $("#pf-email").textContent = c.email || (session && session.user.email) || "";
+      var img = $("#pf-logo-img"), ph = $("#pf-logo-ph");
+      if (c.logo_url) { img.src = c.logo_url; img.hidden = false; ph.hidden = true; }
+      else { img.hidden = true; ph.hidden = false; ph.textContent = (c.nombre || "In").slice(0, 2).toUpperCase(); }
+      var badge = $("#pf-badge");
+      if (c.nif_valido) { badge.hidden = false; badge.textContent = "✔ Empresa verificada"; badge.className = "pf-badge pf-badge--ok"; }
+      else { badge.hidden = true; }
+      setVal("cf-nombre", c.nombre); setVal("cf-email", c.email || (session && session.user.email));
+      setVal("cf-telefono", c.telefono); setVal("cf-web", c.web);
+      setVal("cf-sector", c.sector); setVal("cf-descripcion", c.descripcion); setVal("cf-nif", c.nif);
+    }
+
+    function renderJobs(jobs) {
+      $("#pf-stat-jobs").textContent = jobs.filter(function (j) { return j.estado === "publicada"; }).length;
+      var box = $("#pf-jobs-list");
+      if (!jobs.length) {
+        box.innerHTML = '<div class="pf-empty"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><p>Todavía no has publicado ninguna oferta.</p><a href="publicar-oferta.html" class="pf-btn pf-btn--primary">Publicar mi primera oferta</a></div>';
+        return;
+      }
+      box.innerHTML = jobs.map(function (j) {
+        var pub = j.estado === "publicada";
+        return '<div class="pf-card"><div class="pf-row">' +
+          '<div><p class="pf-job-title">' + esc(j.puesto) + '</p>' +
+          '<div class="pf-job-meta">' +
+            '<span class="pf-pill ' + (pub ? "pf-pill--pub" : "pf-pill--pen") + '">' + (pub ? "Publicada" : "Pendiente") + '</span>' +
+            '<span>' + esc(j.ciudad || "—") + '</span>' +
+            '<span>' + esc(j.tipo_contrato || "") + '</span>' +
+            '<span>' + fmtDate(j.created_at) + '</span>' +
+          '</div></div>' +
+          '<div class="pf-actions">' +
+            '<button type="button" class="pf-btn" data-toggle="' + j.id + '" data-estado="' + esc(j.estado) + '">' + (pub ? "Despublicar" : "Publicar") + '</button>' +
+            '<button type="button" class="pf-btn pf-btn--danger" data-del="' + j.id + '" data-title="' + esc(j.puesto) + '">Eliminar</button>' +
+          '</div></div></div>';
+      }).join("");
+    }
+
+    function renderApps(apps) {
+      $("#pf-stat-apps").textContent = apps.length;
+      var box = $("#pf-apps-list");
+      if (!apps.length) {
+        box.innerHTML = '<div class="pf-empty"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>Aún no has recibido candidaturas. Aparecerán aquí cuando alguien se inscriba a tus ofertas.</p></div>';
+        return;
+      }
+      box.innerHTML = apps.map(function (a) {
+        var cv = a.cv_url ? '<a href="' + esc(a.cv_url) + '" target="_blank" rel="noopener noreferrer" class="pf-btn">Descargar CV</a>' : '';
+        var carta = a.carta ? '<div class="pf-app-carta">' + esc(a.carta) + '</div>' : '';
+        return '<div class="pf-card">' +
+          '<div class="pf-row">' +
+            '<div><p class="pf-job-title">' + esc(a.nombre) + '</p>' +
+            '<div class="pf-job-meta"><span>Para: <strong>' + esc(a.job_title || "—") + '</strong></span><span>' + fmtDate(a.created_at) + '</span></div></div>' +
+            '<div class="pf-actions">' + cv +
+              '<button type="button" class="pf-btn pf-btn--danger" data-delapp="' + a.id + '">Eliminar</button>' +
+            '</div>' +
+          '</div>' +
+          '<dl class="pf-app-grid">' +
+            '<div><dt>Email</dt><dd><a href="mailto:' + esc(a.email) + '">' + esc(a.email) + '</a></dd></div>' +
+            (a.telefono ? '<div><dt>Teléfono</dt><dd>' + esc(a.telefono) + '</dd></div>' : '') +
+            (a.discapacidad ? '<div><dt>Discapacidad</dt><dd>' + esc(a.discapacidad) + '</dd></div>' : '') +
+          '</dl>' + carta +
+          '</div>';
+      }).join("");
+    }
+
+    /* ── Acciones ── */
+    document.addEventListener("click", function (e) {
+      var c = client(); if (!c) return;
+
+      var del = e.target.closest("[data-del]");
+      if (del) {
+        var title = del.getAttribute("data-title") || "esta oferta";
+        if (!confirm('¿Eliminar la oferta "' + title + '"? Esta acción no se puede deshacer.')) return;
+        c.from("jobs").delete().eq("id", del.getAttribute("data-del")).then(function (r) {
+          if (r.error) { toast("No se pudo eliminar: " + r.error.message); return; }
+          toast("Oferta eliminada."); loadAll();
+        });
+        return;
+      }
+
+      var tg = e.target.closest("[data-toggle]");
+      if (tg) {
+        var next = tg.getAttribute("data-estado") === "publicada" ? "pendiente" : "publicada";
+        c.from("jobs").update({ estado: next }).eq("id", tg.getAttribute("data-toggle")).then(function (r) {
+          if (r.error) { toast("No se pudo cambiar: " + r.error.message); return; }
+          toast(next === "publicada" ? "Oferta publicada." : "Oferta despublicada."); loadAll();
+        });
+        return;
+      }
+
+      var da = e.target.closest("[data-delapp]");
+      if (da) {
+        if (!confirm("¿Eliminar esta candidatura?")) return;
+        c.from("applications").delete().eq("id", da.getAttribute("data-delapp")).then(function (r) {
+          if (r.error) { toast("No se pudo eliminar: " + r.error.message); return; }
+          toast("Candidatura eliminada."); loadAll();
+        });
+        return;
+      }
+    });
+
+    /* ── Pestañas ── */
+    document.addEventListener("click", function (e) {
+      var tab = e.target.closest(".pf-tab");
+      if (!tab) return;
+      var name = tab.getAttribute("data-tab");
+      document.querySelectorAll(".pf-tab").forEach(function (t) { t.setAttribute("aria-selected", String(t === tab)); });
+      ["ofertas", "candidaturas", "datos"].forEach(function (n) {
+        var p = $("#panel-" + n); if (p) p.hidden = (n !== name);
+      });
+    });
+
+    /* ── Subir logo ── */
+    $("#pf-logo-btn").addEventListener("click", function () { $("#pf-logo-input").click(); });
+    $("#pf-logo-input").addEventListener("change", function () {
+      var c = client(); if (!c || !session) return;
+      var file = this.files && this.files[0]; if (!file) return;
+      if (file.size > 3 * 1024 * 1024) { toast("La imagen es muy grande (máx. 3 MB)."); return; }
+      var ext = (file.name.split(".").pop() || "png").toLowerCase();
+      var path = session.user.id + "/logo." + ext;
+      toast("Subiendo imagen…");
+      c.storage.from("logos").upload(path, file, { upsert: true, contentType: file.type }).then(function (res) {
+        if (res.error) { toast("No se pudo subir: " + res.error.message); return; }
+        var url = c.storage.from("logos").getPublicUrl(path).data.publicUrl + "?t=" + Date.now();
+        c.from("companies").update({ logo_url: url }).eq("id", session.user.id).then(function (u) {
+          if (u.error) { toast("Imagen subida pero no se guardó: " + u.error.message); return; }
+          var img = $("#pf-logo-img"), ph = $("#pf-logo-ph");
+          img.src = url; img.hidden = false; ph.hidden = true;
+          toast("Foto de perfil actualizada.");
+        });
+      });
+    });
+
+    /* ── Guardar datos de empresa ── */
+    $("#pf-company-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var c = client(); if (!c || !session) return;
+      var btn = $("#cf-save"); btn.disabled = true; btn.textContent = "Guardando…";
+      c.from("companies").update({
+        nombre:      $("#cf-nombre").value.trim(),
+        email:       $("#cf-email").value.trim(),
+        telefono:    $("#cf-telefono").value.trim(),
+        web:         $("#cf-web").value.trim(),
+        sector:      $("#cf-sector").value.trim(),
+        descripcion: $("#cf-descripcion").value.trim(),
+        nif:         $("#cf-nif").value.trim().toUpperCase()
+      }).eq("id", session.user.id).then(function (r) {
+        btn.disabled = false; btn.textContent = "Guardar cambios";
+        if (r.error) { toast("No se pudo guardar: " + r.error.message); return; }
+        toast("Datos guardados."); loadAll();
+      });
+    });
+
+    /* ── Cerrar sesión ── */
+    $("#pf-logout-btn").addEventListener("click", function () {
+      var c = client(); if (!c) return;
+      c.auth.signOut().then(function () { location.href = "index.html"; });
+    });
+
+    /* ── Candado / sesión ── */
+    $("#profile-gate-btn").addEventListener("click", function () {
+      if (window.IncloAuth && window.IncloAuth.open) window.IncloAuth.open("login");
+    });
+
+    document.addEventListener("incloo:session", function (e) {
+      setLogged(e.detail && e.detail.session);
+    });
+
+    // Red de seguridad si auth.js ya había cargado
+    function tryInitial() {
+      if (window.IncloAuth && window.IncloAuth.getSession) {
+        window.IncloAuth.getSession().then(setLogged);
+      } else {
+        setTimeout(tryInitial, 300);
+      }
+    }
+    tryInitial();
+  })();
+  </script>
+</body>
+</html>
