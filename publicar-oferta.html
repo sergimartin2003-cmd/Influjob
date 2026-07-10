@@ -828,40 +828,67 @@
       var cfg = sbConfig();
       if (!cfg.url || !cfg.key) { showError(); return; }
 
-      function sendOffer(accessToken, companyId) {
+      function sendOffer(session) {
         var payload = buildPayload(fd);
-        if (companyId) payload.company_id = companyId;
-        // Clave nueva (sb_publishable_…): va solo en "apikey". Authorization
-        // solo se envía si hay sesión (con el JWT real del usuario); si no,
-        // enviar la clave publishable como Bearer daría "Invalid JWT".
-        var headers = {
-          "apikey":       cfg.key,
-          "Content-Type": "application/json",
-          "Prefer":       "return=minimal"
-        };
-        if (accessToken) headers["Authorization"] = "Bearer " + accessToken;
+        var client  = window.IncloAuth && window.IncloAuth.client;
+
+        // Publicar EXIGE sesión de empresa: la política de seguridad de Supabase
+        // rechaza (403 / RLS) cualquier inserción que no venga autenticada.
+        if (!session || !session.user) {
+          showError("Debes iniciar sesión como empresa para publicar. Pulsa «Acceso empresas» arriba, entra y vuelve a intentarlo.");
+          return;
+        }
+        payload.company_id = session.user.id;
+
+        // Insertar con el cliente de Supabase: adjunta y REFRESCA el token de
+        // sesión automáticamente. El fetch manual anterior enviaba un token que,
+        // si había caducado, Supabase ignoraba → la petición pasaba como anónima
+        // → auth.uid() nulo → error 42501 (RLS). Con el cliente esto no ocurre.
+        if (client) {
+          // Asegurar que existe la ficha de empresa (la oferta la referencia por
+          // company_id). Si la cuenta se creó antes del trigger, no existiría y
+          // la inserción fallaría por clave foránea. ignoreDuplicates no pisa los
+          // datos si ya existe.
+          client.from("companies").upsert(
+            { id: session.user.id, nombre: payload.empresa || "", email: session.user.email || "" },
+            { onConflict: "id", ignoreDuplicates: true }
+          ).then(function () {
+            return client.from("jobs").insert(payload);
+          }).then(function (res) {
+            if (!res.error) { showSuccess(); return; }
+            var e = res.error;
+            showError("HTTP " + (res.status || "") + " · " + (e.message || "") + (e.code ? " (" + e.code + ")" : ""));
+          }).catch(function (err) {
+            showError("Fallo de red: " + (err && err.message ? err.message : "sin conexión"));
+          });
+          return;
+        }
+
+        // Fallback sin librería: fetch con el token de la sesión
         fetch(cfg.url + "/rest/v1/jobs", {
           method: "POST",
-          headers: headers,
+          headers: {
+            "apikey":        cfg.key,
+            "Content-Type":  "application/json",
+            "Prefer":        "return=minimal",
+            "Authorization": "Bearer " + session.access_token
+          },
           body: JSON.stringify(payload)
-        })
-        .then(function(res) {
+        }).then(function (res) {
           if (res.ok) { showSuccess(); return; }
-          // Mostrar la causa real (RLS, clave foránea de company_id, etc.)
-          res.text().then(function(t) {
+          res.text().then(function (t) {
             showError("HTTP " + res.status + (t ? " · " + t.slice(0, 300) : ""));
-          }).catch(function() { showError("HTTP " + res.status); });
-        })
-        .catch(function(err) { showError("Fallo de red: " + (err && err.message ? err.message : "sin conexión")); });
+          }).catch(function () { showError("HTTP " + res.status); });
+        }).catch(function (err) {
+          showError("Fallo de red: " + (err && err.message ? err.message : "sin conexión"));
+        });
       }
 
-      // Si la empresa ha iniciado sesión, la oferta queda ligada a su cuenta
+      // Enviar con la sesión actual (la oferta queda ligada a la cuenta)
       if (window.IncloAuth && window.IncloAuth.getSession) {
-        window.IncloAuth.getSession().then(function(session) {
-          sendOffer(session && session.access_token, session && session.user && session.user.id);
-        }).catch(function() { sendOffer(null, null); });
+        window.IncloAuth.getSession().then(sendOffer).catch(function () { sendOffer(null); });
       } else {
-        sendOffer(null, null);
+        sendOffer(null);
       }
     });
 
