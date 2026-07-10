@@ -112,12 +112,19 @@
     }
     .check-label input[type="checkbox"],
     .check-label input[type="radio"] {
+      /* Restaurar el aspecto nativo: el reset .form-group input les ponía
+         appearance:none y no se veía la marca al pulsarlos. */
+      appearance: auto;
+      -webkit-appearance: auto;
       width: 17px; height: 17px;
-      border: 1.5px solid var(--gray-400);
-      border-radius: 4px;
+      min-width: 17px;
+      padding: 0;
+      border: 0;
+      box-shadow: none;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 1px;
       accent-color: var(--blue-mid);
+      cursor: pointer;
     }
     .check-grid {
       display: grid;
@@ -770,12 +777,11 @@
       var radioRequired = ["ajustes_razonables"];
       radioRequired.forEach(function (name) {
         var checked = form.querySelector("input[name='" + name + "']:checked");
-        if (!checked) {
-          form.querySelectorAll("input[name='" + name + "']").forEach(function (r) {
-            r.style.outline = "2px solid #ef4444";
-          });
-          valid = false;
-        }
+        // Marcar en rojo si falta; quitar el rojo en cuanto haya una opción elegida
+        form.querySelectorAll("input[name='" + name + "']").forEach(function (r) {
+          r.style.outline = checked ? "" : "2px solid #ef4444";
+        });
+        if (!checked) valid = false;
       });
       return valid;
     }
@@ -783,7 +789,8 @@
     function buildPayload(fd) {
       // Map form fields to Supabase jobs table columns
       var discapacidadTipos = [];
-      fd.getAll("discapacidad_tipos").forEach(function(v) { discapacidadTipos.push(v); });
+      // Las casillas del formulario se llaman "discapacidad_tipo" (singular)
+      fd.getAll("discapacidad_tipo").forEach(function(v) { discapacidadTipos.push(v); });
       return {
         empresa:            fd.get("empresa")            || "",
         web_empresa:        fd.get("web_empresa")        || "",
@@ -869,6 +876,15 @@
       if (e.target.style.borderColor === "rgb(239, 68, 68)") {
         e.target.style.borderColor = "";
         e.target.removeAttribute("aria-invalid");
+      }
+    });
+
+    // Al elegir una opción del campo obligatorio, quitar el contorno rojo
+    form.addEventListener("change", function (e) {
+      if (e.target.name === "ajustes_razonables") {
+        form.querySelectorAll("input[name='ajustes_razonables']").forEach(function (r) {
+          r.style.outline = "";
+        });
       }
     });
 
