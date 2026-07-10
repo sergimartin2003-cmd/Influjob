@@ -117,8 +117,18 @@
       benefits:     (j.beneficios   || "").split("\n").map(function(s){return s.trim();}).filter(Boolean),
       source_url:     j.source_url    || "",
       date:           j.created_at ? j.created_at.substring(0, 10) : "",
-      email_contacto: j.email_contacto || ""
+      email_contacto: j.email_contacto || "",
+      // Origen externo: "fuente" no vacío = oferta agregada de otra plataforma
+      fuente:         j.fuente || "",
+      platform:       j.fuente || "",
+      certificate:    (j.certificado_minimo || "").trim()
     };
+  }
+
+  // Normaliza el certificado mínimo a una clave de filtro: "33" | "45" | "65" | "sin"
+  function certKey(cert) {
+    var m = String(cert || "").match(/(33|45|65)/);
+    return m ? m[1] : "sin";
   }
 
   var SVG_PIN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
@@ -162,6 +172,58 @@
       '</article>';
   }
 
+  // Tarjeta para ofertas AGREGADAS de otras plataformas: en vez del formulario
+  // de candidatura, enlaza a la publicación original en su plataforma de origen.
+  function buildExternalCardHTML(job) {
+    var mod      = job.modality.toLowerCase();
+    var modClass = mod === "híbrido" ? "hibrido" : mod;
+    var modLabel = mod ? mod.charAt(0).toUpperCase() + mod.slice(1) : "";
+    var dateStr  = job.date ? formatJobDate(job.date) : "";
+    var disaList = job.disabilities || [];
+    var disaBadges = disaList.length
+      ? disaList.map(function(d) { return '<span class="disability-badge" title="Discapacidad ' + escHTML(d) + '">' + (DISA_ICONS[d] || "●") + "</span>"; }).join("")
+      : '<span class="disability-badge disability-badge--generic" title="Apta para cualquier tipo de discapacidad">Cualquier discapacidad</span>';
+
+    var ck = certKey(job.certificate);
+    var certBadge = job.certificate
+      ? '<span class="job-cert" title="Certificado de discapacidad mínimo">Cert. ≥ ' + escHTML(job.certificate) + '</span>'
+      : '<span class="job-cert job-cert--none" title="No se indica certificado mínimo">Sin mínimo</span>';
+
+    var platform = job.platform || "otra plataforma";
+    var url = job.source_url || "";
+    var safeUrl = /^https?:\/\//i.test(url) ? url : "";
+    var cta = safeUrl
+      ? '<a class="btn btn-external" href="' + escHTML(safeUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="Ver la oferta ' + escHTML(job.title) + ' en ' + escHTML(platform) + ' (se abre en una pestaña nueva)">Ver oferta en ' + escHTML(platform) +
+          ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>'
+      : '<span class="btn btn-external is-disabled" aria-disabled="true">Enlace no disponible</span>';
+
+    return '<article class="job-card ext-card reveal" role="listitem"' +
+      ' data-city="'         + escHTML(norm(job.city)) + '"' +
+      ' data-disabilities="' + escHTML(disaList.join(" ")) + '"' +
+      ' data-cert="'         + escHTML(ck) + '"' +
+      ' data-platform="'     + escHTML(norm(platform)) + '">' +
+      '<div class="job-card-top">' +
+        '<div class="job-logo" aria-hidden="true" style="--logo-color:' + job.color + '">' + escHTML(job.initials) + '</div>' +
+        '<div class="job-meta-top">' +
+          '<span class="job-platform" title="Recopilada de ' + escHTML(platform) + '">vía ' + escHTML(platform) + '</span>' +
+          (modLabel ? '<span class="job-modality job-modality--' + modClass + '">' + modLabel + '</span>' : '') +
+          (dateStr ? '<span class="job-date"><time datetime="' + job.date + '">' + dateStr + '</time></span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<h3 class="job-title">' + escHTML(job.title) + '</h3>' +
+      '<p class="job-company">' + escHTML(job.company) + '</p>' +
+      '<div class="job-info">' +
+        '<span class="job-city">' + SVG_PIN + ' ' + escHTML(job.city) + '</span>' +
+        (job.salary ? '<span class="job-salary">' + escHTML(job.salary) + '</span>' : '') +
+      '</div>' +
+      '<div class="ext-tags">' +
+        '<div class="job-disabilities" aria-label="Perfiles de discapacidad">' + disaBadges + '</div>' +
+        certBadge +
+      '</div>' +
+      '<div class="job-actions">' + cta + '</div>' +
+      '</article>';
+  }
+
   // Shared filter state — set by hero search form, consumed by applyFilters
   let activeCity = "";
   let activeText = "";
@@ -175,7 +237,9 @@
   function applyFilters(resetPage) {
     if (resetPage) currentShownCount = CARDS_PER_PAGE;
 
-    const cards       = $$(".job-card");
+    // Solo las tarjetas del tablón interno; las de "otras plataformas" tienen
+    // su propia lógica de filtrado (.ext-card en initExternalJobs).
+    const cards       = $$("[data-jobs] .job-card");
     const selModality   = $("#filter-modality");
     const selContract   = $("#filter-contract");
     const selOficio     = $("#filter-oficio");
@@ -243,7 +307,7 @@
     }
     if (loadMore) {
       loadMore.hidden = totalMatches <= currentShownCount;
-      const hint = $(".jobs-load-hint");
+      const hint = loadMore.querySelector(".jobs-load-hint");
       if (hint) hint.textContent = `Mostrando ${visibleNow} de ${totalMatches} ofertas`;
     }
 
@@ -459,7 +523,7 @@
     const loadMoreBtn = loadMore && loadMore.querySelector("button");
     if (loadMoreBtn) {
       loadMoreBtn.addEventListener("click", () => {
-        const paginated = $$(".job-card.is-paginated");
+        const paginated = $$("[data-jobs] .job-card.is-paginated");
         if (!paginated.length) return;
 
         currentShownCount += CARDS_PER_PAGE;
@@ -468,9 +532,9 @@
           card.setAttribute("aria-hidden", "false");
         });
 
-        const stillPaginated = $$(".job-card.is-paginated").length;
+        const stillPaginated = $$("[data-jobs] .job-card.is-paginated").length;
         const shown = totalMatches - stillPaginated;
-        const hint = $(".jobs-load-hint");
+        const hint = loadMore.querySelector(".jobs-load-hint");
         if (hint) hint.textContent = `Mostrando ${shown} de ${totalMatches} ofertas`;
 
         if (stillPaginated === 0) {
@@ -994,6 +1058,11 @@
   var currentModalJob = null;
   var fetchInFlight = false;
 
+  // Estado de la sección "Ofertas en otras plataformas" (agregadas por el bot)
+  var externalJobs = [];
+  var extShown = CARDS_PER_PAGE;
+  var extTotal = 0;
+
   function renderJobsToGrid(jobs) {
     var grid = $("[data-jobs]");
     if (!grid || !jobs.length) return;
@@ -1019,28 +1088,14 @@
       sbGet("jobs?estado=eq.publicada&order=created_at.desc&limit=500")
         .then(function(rows) {
           fetchInFlight = false;
-          if (!rows || !rows.length) {
-            // No hay ofertas reales publicadas todavía: dejar el tablón vacío
-            liveJobs = [];
-            data.jobs = [];
-            var emptyGrid = $("[data-jobs]");
-            if (emptyGrid) emptyGrid.innerHTML = "";
-            var rc = $("[data-results-count]");
-            if (rc) rc.textContent = "0";
-            var sc = $("[data-count-to]");
-            if (sc) { sc.setAttribute("data-count-to", "0"); sc.textContent = "0"; }
-            var bb = $(".bot-badge");
-            if (bb) bb.style.display = "none";
-            applyFilters();
-            return;
-          }
+          rows = rows || [];
 
           // Empresas y patrones bloqueados en cliente (falsos positivos del bot)
           var BLOCKED_COMPANIES = ["veterinary staff", "the vet office", "gmail"];
           var BLOCKED_TITLE_WORDS = ["irlanda", "ireland", "uk jobs"];
 
           // Adapt rows to normalized job objects, filtering only hard-blocked entries
-          liveJobs = rows.map(adaptSbJob).filter(function(job) {
+          var allJobs = rows.map(adaptSbJob).filter(function(job) {
             var co = (job.company || "").toLowerCase();
             var ti = (job.title  || "").toLowerCase();
             if (BLOCKED_COMPANIES.some(function(b) { return co.includes(b); })) return false;
@@ -1048,61 +1103,193 @@
             return true;
           });
 
+          // Separar: internas (publicadas en Incloo por empresas, fuente vacía)
+          // vs externas (agregadas de otras plataformas por el bot, con fuente).
+          liveJobs = allJobs.filter(function(j) { return !j.fuente; });
+          var external = allJobs.filter(function(j) { return !!j.fuente; });
+
           // Merge with manifest fallback — live takes priority over mock
           data.jobs = liveJobs;
 
           var grid = $("[data-jobs]");
-          if (!grid) return;
+          if (grid) {
+            // Replace grid contents with live cards — mark all visible immediately
+            grid.innerHTML = liveJobs.map(buildCardHTML).join("");
+            $$(".job-card", grid).forEach(function(c) { c.classList.add("is-visible"); });
 
-          // Replace grid contents with live cards — mark all visible immediately
-          grid.innerHTML = liveJobs.map(buildCardHTML).join("");
-          $$(".job-card", grid).forEach(function(c) { c.classList.add("is-visible"); });
-
-          // Re-run tilt on new cards
-          if (fineHover && !reduced) {
-            $$(".job-card", grid).forEach(function(card) {
-              card.addEventListener("mousemove", function(e) {
-                var rect = card.getBoundingClientRect();
-                var x = (e.clientX - rect.left) / rect.width  - 0.5;
-                var y = (e.clientY - rect.top)  / rect.height - 0.5;
-                card.style.transform = "translateY(-3px) rotateX(" + (-y * 5).toFixed(1) + "deg) rotateY(" + (x * 5).toFixed(1) + "deg)";
-                card.style.transition = "transform .1s";
+            // Re-run tilt on new cards
+            if (fineHover && !reduced) {
+              $$(".job-card", grid).forEach(function(card) {
+                card.addEventListener("mousemove", function(e) {
+                  var rect = card.getBoundingClientRect();
+                  var x = (e.clientX - rect.left) / rect.width  - 0.5;
+                  var y = (e.clientY - rect.top)  / rect.height - 0.5;
+                  card.style.transform = "translateY(-3px) rotateX(" + (-y * 5).toFixed(1) + "deg) rotateY(" + (x * 5).toFixed(1) + "deg)";
+                  card.style.transition = "transform .1s";
+                });
+                card.addEventListener("mouseleave", function() {
+                  card.style.transform = "";
+                  card.style.transition = "all .4s var(--ease-out)";
+                });
               });
-              card.addEventListener("mouseleave", function() {
-                card.style.transform = "";
-                card.style.transition = "all .4s var(--ease-out)";
-              });
-            });
+            }
           }
 
-          // Update all offer counters with real count
-          var n = liveJobs.length;
-          // Filter bar counter (e.g. "70 ofertas")
+          // Contador de la barra de filtros interna
           var resultsCount = $("[data-results-count]");
-          if (resultsCount) resultsCount.textContent = String(n);
-          // Animated stats counter in the stats section
+          if (resultsCount) resultsCount.textContent = String(liveJobs.length);
+
+          // Contador animado de la sección de stats: total (internas + externas)
+          var total = allJobs.length;
           var statCount = $("[data-count-to]");
           if (statCount) {
-            statCount.setAttribute("data-count-to", n);
-            statCount.setAttribute("aria-label", n + " ofertas activas");
-            statCount.textContent = n.toLocaleString("es-ES");
+            statCount.setAttribute("data-count-to", total);
+            statCount.setAttribute("aria-label", total + " ofertas activas");
+            statCount.textContent = total.toLocaleString("es-ES");
           }
 
-          // Update bot badge
+          // La chapa del bot refleja las ofertas recopiladas de otras plataformas
           var badge = $(".bot-badge");
           if (badge) {
-            badge.textContent = liveJobs.length;
-            badge.style.display = liveJobs.length ? "" : "none";
+            badge.textContent = external.length;
+            badge.style.display = external.length ? "" : "none";
           }
 
           // Re-apply current filters so any active filter still works
           applyFilters();
+
+          // Render de la sección "Ofertas en otras plataformas"
+          renderExternalGrid(external);
         }).catch(function() { fetchInFlight = false; });
     }
 
     fetchAndRender();
     // Poll every 5 minutes
     setInterval(fetchAndRender, 5 * 60 * 1000);
+  }
+
+  /* ─────────────────────────────────────────
+     OFERTAS EN OTRAS PLATAFORMAS (agregadas)
+  ───────────────────────────────────────── */
+  // Rellena el desplegable de plataformas con las que aparecen en las ofertas.
+  function populateExtPlatformFilter(jobs) {
+    var sel = $("#filter-ext-platform");
+    if (!sel) return;
+    var current = sel.value;
+    var names = {};
+    jobs.forEach(function(j) { if (j.platform) names[j.platform] = true; });
+    var sorted = Object.keys(names).sort(function(a, b) { return a.localeCompare(b, "es"); });
+    sel.innerHTML = '<option value="">Todas</option>' +
+      sorted.map(function(p) { return '<option value="' + escHTML(norm(p)) + '">' + escHTML(p) + '</option>'; }).join("");
+    if (current && sorted.map(norm).indexOf(current) !== -1) sel.value = current;
+  }
+
+  function renderExternalGrid(jobs) {
+    externalJobs = jobs || [];
+    var grid = $("[data-external-jobs]");
+    if (!grid) return;
+    grid.innerHTML = externalJobs.map(buildExternalCardHTML).join("");
+    $$(".ext-card", grid).forEach(function(c) { c.classList.add("is-visible"); });
+    populateExtPlatformFilter(externalJobs);
+    applyExternalFilters(false);
+  }
+
+  function applyExternalFilters(resetPage) {
+    if (resetPage) extShown = CARDS_PER_PAGE;
+
+    var cards = $$(".ext-card");
+    var selCity = $("#filter-ext-city");
+    var selDis  = $("#filter-ext-disability");
+    var selCert = $("#filter-ext-cert");
+    var selPlat = $("#filter-ext-platform");
+
+    var city = norm(selCity ? selCity.value : "");
+    var dis  = norm(selDis  ? selDis.value  : "");
+    var cert = selCert ? selCert.value : "";
+    var plat = norm(selPlat ? selPlat.value : "");
+
+    var matching = [];
+    cards.forEach(function(card) {
+      var cCity = norm(card.dataset.city || "");
+      var cDis  = norm(card.dataset.disabilities || "");
+      var cCert = card.dataset.cert || "";
+      var cPlat = norm(card.dataset.platform || "");
+
+      var match =
+        (!city || cCity.includes(city))      &&
+        (!dis  || !cDis || cDis.includes(dis)) &&
+        (!cert || cCert === cert)            &&
+        (!plat || cPlat === plat);
+
+      card.classList.toggle("is-hidden", !match);
+      if (match) matching.push(card);
+    });
+
+    extTotal = matching.length;
+    matching.forEach(function(card, i) {
+      var paginated = i >= extShown;
+      card.classList.toggle("is-paginated", paginated);
+      card.setAttribute("aria-hidden", paginated ? "true" : "false");
+    });
+    cards.forEach(function(card) {
+      if (card.classList.contains("is-hidden")) card.setAttribute("aria-hidden", "true");
+    });
+
+    var visibleNow = Math.min(extTotal, extShown);
+    var counter = $("[data-external-count]");
+    if (counter) counter.textContent = String(extTotal);
+
+    var emptyEl = $("#external-empty");
+    if (emptyEl) {
+      emptyEl.hidden = extTotal > 0;
+      var msgEl    = emptyEl.querySelector("p");
+      var emptyBtn = emptyEl.querySelector("[data-reset-ext-filters]");
+      if (cards.length === 0) {
+        if (msgEl) msgEl.textContent = "El bot aún no ha recopilado ofertas de otras plataformas. Vuelve pronto.";
+        if (emptyBtn) emptyBtn.hidden = true;
+      } else {
+        if (msgEl) msgEl.textContent = "No hay ofertas externas con estos filtros.";
+        if (emptyBtn) emptyBtn.hidden = false;
+      }
+    }
+
+    var loadMore = $("#external-load-more");
+    if (loadMore) {
+      loadMore.hidden = extTotal <= extShown;
+      var hint = loadMore.querySelector(".jobs-load-hint");
+      if (hint) hint.textContent = "Mostrando " + visibleNow + " de " + extTotal + " ofertas";
+    }
+
+    var hasFilters = !!(city || dis || cert || plat);
+    var resetBtn = $("#reset-ext-filters");
+    if (resetBtn) resetBtn.hidden = !hasFilters;
+  }
+
+  function initExternalJobs() {
+    ["#filter-ext-city", "#filter-ext-disability", "#filter-ext-cert", "#filter-ext-platform"].forEach(function(id) {
+      var sel = $(id);
+      if (sel) sel.addEventListener("change", function() { applyExternalFilters(true); });
+    });
+
+    // "Limpiar filtros" (barra de filtros y estado vacío)
+    document.addEventListener("click", function(e) {
+      if (!e.target.closest("[data-reset-ext-filters]")) return;
+      ["#filter-ext-city", "#filter-ext-disability", "#filter-ext-cert", "#filter-ext-platform"].forEach(function(id) {
+        var sel = $(id);
+        if (sel) sel.value = "";
+      });
+      applyExternalFilters(true);
+    });
+
+    // "Ver más ofertas"
+    var loadMore = $("#external-load-more");
+    var loadMoreBtn = loadMore && loadMore.querySelector("button");
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener("click", function() {
+        extShown += CARDS_PER_PAGE;
+        applyExternalFilters(false);
+      });
+    }
   }
 
   /* ─────────────────────────────────────────
@@ -1143,6 +1330,7 @@
     safe(initSupabase,      "initSupabase");   // render jobs first so initTilt/initReveals see them
     safe(initReveals,       "initReveals");
     safe(initFilters,       "initFilters");
+    safe(initExternalJobs,  "initExternalJobs");
     safe(initHeroSearch,    "initHeroSearch");
     safe(initModal,         "initModal");
     safe(initBot,           "initBot");
