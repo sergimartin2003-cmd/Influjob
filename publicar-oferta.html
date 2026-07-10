@@ -600,6 +600,7 @@
             </div>
             <h3>Error al enviar</h3>
             <p>No se pudo enviar el formulario. Por favor, escríbenos directamente a <a href="mailto:hola@inclujob.es">hola@inclujob.es</a> con los datos de la oferta.</p>
+            <p id="form-error-detail" style="font-size:.8rem;color:#94a3b8;margin:.25rem 0 0;word-break:break-word;"></p>
             <button class="btn btn-outline" id="retry-btn" style="margin-top:.5rem;">Intentar de nuevo</button>
           </div>
 
@@ -745,9 +746,11 @@
       successEl.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
-    function showError() {
+    function showError(detail) {
       submitBtn.removeAttribute("aria-busy");
       submitBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Enviar oferta';
+      var det = document.getElementById("form-error-detail");
+      if (det) det.textContent = detail ? ("Detalle técnico: " + detail) : "";
       errorEl.classList.add("visible");
       errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -836,10 +839,13 @@
           body: JSON.stringify(payload)
         })
         .then(function(res) {
-          if (res.ok) { showSuccess(); }
-          else { showError(); }
+          if (res.ok) { showSuccess(); return; }
+          // Mostrar la causa real (RLS, clave foránea de company_id, etc.)
+          res.text().then(function(t) {
+            showError("HTTP " + res.status + (t ? " · " + t.slice(0, 300) : ""));
+          }).catch(function() { showError("HTTP " + res.status); });
         })
-        .catch(function() { showError(); });
+        .catch(function(err) { showError("Fallo de red: " + (err && err.message ? err.message : "sin conexión")); });
       }
 
       // Si la empresa ha iniciado sesión, la oferta queda ligada a su cuenta
