@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
 
   <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=20260711">
+  <link rel="stylesheet" href="styles.css?v=20260712">
 
   <!-- Open Graph / redes sociales -->
   <meta property="og:type"        content="website">
@@ -53,7 +53,6 @@
       <nav aria-label="Navegación principal">
         <ul class="nav-links" role="list">
           <li><a href="#empleos" class="nav-link">Empleos</a></li>
-          <li><a href="#otras-plataformas" class="nav-link">Otras plataformas</a></li>
           <li><a href="#como-funciona" class="nav-link">Cómo funciona</a></li>
           <li><a href="#empresas" class="nav-link">Empresas</a></li>
           <li><a href="#newsletter" class="nav-link">Newsletter</a></li>
@@ -74,7 +73,6 @@
     <div class="nav-mobile" id="nav-mobile" hidden aria-label="Menú móvil">
       <ul role="list">
         <li><a href="#empleos" class="nav-link">Empleos</a></li>
-        <li><a href="#otras-plataformas" class="nav-link">Otras plataformas</a></li>
         <li><a href="#como-funciona" class="nav-link">Cómo funciona</a></li>
         <li><a href="#empresas" class="nav-link">Empresas</a></li>
         <li><a href="#newsletter" class="nav-link">Newsletter</a></li>
@@ -315,97 +313,6 @@
         <div class="jobs-load-more" id="jobs-load-more">
           <p class="jobs-load-hint">Mostrando 6 de 12 ofertas</p>
           <button type="button" class="btn btn-outline" aria-label="Cargar más ofertas de empleo">
-            Ver más ofertas
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         OFERTAS EN OTRAS PLATAFORMAS (agregadas por el bot)
-    ═══════════════════════════════════════════ -->
-    <section id="otras-plataformas" class="jobs-section external-section" aria-labelledby="external-title">
-      <div class="container">
-        <div class="jobs-header">
-          <p class="section-eyebrow reveal">Rastreamos la web por ti</p>
-          <h2 id="external-title" class="section-title reveal">Ofertas en otras plataformas</h2>
-          <p class="section-sub reveal">Ofertas reales para personas con discapacidad que nuestro bot recopila de otros portales de empleo (InfoJobs, Indeed, LinkedIn y más), ya filtradas por tipo de discapacidad y certificado. Cada oferta enlaza a su publicación original.</p>
-        </div>
-
-        <!-- Filters bar -->
-        <div class="filters-bar reveal" role="group" aria-label="Filtros de ofertas externas">
-          <div class="filter-group">
-            <label for="filter-ext-city" class="filter-label">Ciudad</label>
-            <select id="filter-ext-city" class="filter-select" aria-label="Filtrar ofertas externas por ciudad">
-              <option value="">Cualquier ciudad</option>
-              <option value="madrid">Madrid</option>
-              <option value="barcelona">Barcelona</option>
-              <option value="valencia">Valencia</option>
-              <option value="sevilla">Sevilla</option>
-              <option value="bilbao">Bilbao</option>
-              <option value="zaragoza">Zaragoza</option>
-              <option value="málaga">Málaga</option>
-              <option value="murcia">Murcia</option>
-              <option value="palma">Palma</option>
-              <option value="alicante">Alicante</option>
-              <option value="a coruña">A Coruña</option>
-              <option value="remoto">Remoto</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="filter-ext-disability" class="filter-label">Tipo de discapacidad</label>
-            <select id="filter-ext-disability" class="filter-select" aria-label="Filtrar ofertas externas por tipo de discapacidad">
-              <option value="">Todos los perfiles</option>
-              <option value="física">Física / motora</option>
-              <option value="visual">Visual</option>
-              <option value="auditiva">Auditiva</option>
-              <option value="intelectual">Intelectual</option>
-              <option value="psicosocial">Psicosocial / salud mental</option>
-              <option value="orgánica">Orgánica</option>
-              <option value="tea">TEA / neurodivergencia</option>
-              <option value="múltiple">Múltiple</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="filter-ext-cert" class="filter-label">Certificado</label>
-            <select id="filter-ext-cert" class="filter-select" aria-label="Filtrar ofertas externas por certificado mínimo">
-              <option value="">Cualquiera</option>
-              <option value="sin">Sin mínimo indicado</option>
-              <option value="33">Desde 33%</option>
-              <option value="45">Desde 45%</option>
-              <option value="65">Desde 65%</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="filter-ext-platform" class="filter-label">Plataforma</label>
-            <select id="filter-ext-platform" class="filter-select" aria-label="Filtrar por plataforma de origen">
-              <option value="">Todas</option>
-            </select>
-          </div>
-          <div class="filter-results" aria-live="polite" aria-atomic="true">
-            <span data-external-count>0</span> ofertas
-            <button type="button" class="btn-reset-inline" id="reset-ext-filters" data-reset-ext-filters hidden aria-label="Limpiar filtros de ofertas externas">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Limpiar filtros
-            </button>
-          </div>
-        </div>
-
-        <!-- External job cards grid -->
-        <div class="jobs-grid" data-external-jobs role="list" aria-label="Lista de ofertas de otras plataformas">
-        </div><!-- /jobs-grid -->
-
-        <div class="jobs-empty" id="external-empty" hidden role="status" aria-live="polite">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          <p>El bot aún no ha recopilado ofertas de otras plataformas. Vuelve pronto.</p>
-          <button type="button" class="btn btn-outline" data-reset-ext-filters hidden>Limpiar filtros</button>
-        </div>
-
-        <div class="jobs-load-more" id="external-load-more" hidden>
-          <p class="jobs-load-hint">Mostrando 0 de 0 ofertas</p>
-          <button type="button" class="btn btn-outline" aria-label="Cargar más ofertas de otras plataformas">
             Ver más ofertas
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           </button>
@@ -828,7 +735,7 @@
   <script defer src="lib/manifest.js?v=20260707"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script defer src="lib/auth.js?v=20260710"></script>
-  <script defer src="main.js?v=20260710"></script>
+  <script defer src="main.js?v=20260712"></script>
 </body>
 </html>
 

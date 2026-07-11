@@ -897,79 +897,6 @@ input { font: inherit; }
 .jobs-load-hint { font-size: .85rem; color: var(--gray-500); }
 
 /* =============================================================
-   8b. Ofertas en otras plataformas (agregadas por el bot)
-   ============================================================= */
-.external-section {
-  background:
-    radial-gradient(ellipse 70% 55% at 12% 0%, rgba(46,204,113,.06), transparent 62%),
-    var(--white);
-  border-top: 1px solid var(--gray-200);
-}
-
-/* Tarjeta externa: hereda .job-card, con acentos propios */
-.ext-card { border-color: var(--gray-300); }
-.ext-card:hover { border-color: var(--green-dark); }
-
-/* Pastilla con la plataforma de origen ("vía InfoJobs") */
-.job-platform {
-  font-size: .68rem;
-  font-weight: 700;
-  padding: .2rem .55rem;
-  border-radius: 999px;
-  background: var(--blue-pale);
-  color: var(--blue-deep);
-  letter-spacing: .02em;
-  white-space: nowrap;
-}
-
-/* Fila con badges de discapacidad + certificado */
-.ext-tags {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: .5rem;
-  flex-wrap: wrap;
-}
-
-.job-cert {
-  font-size: .68rem;
-  font-weight: 700;
-  padding: .2rem .55rem;
-  border-radius: 999px;
-  background: var(--green-pale);
-  color: var(--green-dark);
-  white-space: nowrap;
-}
-.job-cert--none { background: var(--gray-200); color: var(--gray-500); }
-
-/* Botón que enlaza a la publicación original */
-.btn-external {
-  width: 100%;
-  justify-content: center;
-  gap: .4rem;
-  background: var(--blue-deep);
-  color: var(--white);
-  font-size: .82rem;
-  font-weight: 600;
-  padding: .6rem 1rem;
-  border-radius: 8px;
-  text-decoration: none;
-}
-.btn-external:hover {
-  background: var(--blue-mid);
-  box-shadow: 0 4px 14px rgba(26,58,107,.3);
-  transform: translateY(-1px);
-}
-.btn-external.is-disabled {
-  background: var(--gray-200);
-  color: var(--gray-500);
-  cursor: not-allowed;
-  pointer-events: none;
-  box-shadow: none;
-  transform: none;
-}
-
-/* =============================================================
    9. How it works
    ============================================================= */
 .how-section {
@@ -2033,24 +1960,12 @@ body[data-theme="dark"] { background: #111827; color: var(--ink); }
 [data-theme="dark"] .companies-section { background: #192033; }
 
 [data-theme="dark"] .jobs-section { background: #111827; }
-[data-theme="dark"] .external-section {
-  background:
-    radial-gradient(ellipse 70% 55% at 12% 0%, rgba(46,204,113,.08), transparent 62%),
-    #0f1524;
-  border-top-color: #24314d;
-}
 
 [data-theme="dark"] .job-card {
   background: #1a2540;
   border-color: var(--gray-300);
 }
 
-[data-theme="dark"] .job-platform { background: rgba(78,130,240,.16); color: #90c0f8; }
-[data-theme="dark"] .job-cert { background: rgba(46,204,113,.16); color: #7fe0a8; }
-[data-theme="dark"] .job-cert--none { background: #1f2937; color: #9aa7b8; }
-[data-theme="dark"] .btn-external { background: var(--blue-mid); }
-[data-theme="dark"] .btn-external:hover { background: var(--blue-light); }
-[data-theme="dark"] .btn-external.is-disabled { background: #1f2937; color: #6b7688; }
 
 [data-theme="dark"] .filters-bar {
   background: #1a2540;
