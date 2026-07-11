@@ -1203,6 +1203,55 @@ input { font: inherit; }
 
 .companies-cta p { font-size: .95rem; color: var(--gray-500); }
 
+/* Empresas — datos del dossier (cumplimiento legal) */
+.companies-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 720px) { .companies-stats { grid-template-columns: repeat(2, 1fr); } }
+.companies-stat {
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+.companies-stat b {
+  display: block;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  color: var(--blue-deep);
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+.companies-stat span { font-size: .8rem; color: var(--gray-500); line-height: 1.4; display: block; margin-top: .35rem; }
+
+.companies-dossier {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: linear-gradient(135deg, var(--blue-pale) 0%, var(--green-pale) 100%);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.companies-dossier-icon {
+  width: 52px; height: 52px; flex-shrink: 0;
+  border-radius: 14px; background: var(--blue-deep); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.companies-dossier-text { flex: 1; min-width: 200px; }
+.companies-dossier-text h3 { font-size: 1.1rem; color: var(--ink); margin: 0 0 .25rem; }
+.companies-dossier-text p { font-size: .88rem; color: var(--gray-500); margin: 0; }
+
+[data-theme="dark"] .companies-stat { background: #111827; border-color: #2d3a55; }
+[data-theme="dark"] .companies-stat b { color: #90c0f8; }
+[data-theme="dark"] .companies-dossier { background: linear-gradient(135deg, #16233f 0%, #142a22 100%); border-color: #2d3a55; }
+
 /* =============================================================
    12. Newsletter
    ============================================================= */
