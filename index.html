@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap">
 
   <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=20260712">
+  <link rel="stylesheet" href="styles.css?v=20260713">
 
   <!-- Open Graph / redes sociales -->
   <meta property="og:type"        content="website">
@@ -342,7 +342,7 @@
             </div>
             <div class="step-content">
               <h3>Busca tu empleo</h3>
-              <p>Filtra por ciudad, sector y modalidad de trabajo. Nuestro bot rastreador actualiza las ofertas cada hora desde más de 800 fuentes de empleo en España.</p>
+              <p>Filtra por ciudad, sector y modalidad de trabajo, y encuentra ofertas de empleo inclusivas publicadas por empresas comprometidas con la inclusión.</p>
             </div>
           </li>
 
@@ -685,57 +685,13 @@
     </div>
   </dialog>
 
-  <!-- Bot widget -->
-  <div class="bot-widget" role="complementary" aria-label="Asistente IncloBot">
-    <div class="bot-panel" id="bot-panel" hidden>
-      <div class="bot-panel-header">
-        <div class="bot-avatar" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a2 2 0 012 2v1h2a3 3 0 013 3v1a1 1 0 011 1v2a1 1 0 01-1 1v1a3 3 0 01-3 3H8a3 3 0 01-3-3v-1a1 1 0 01-1-1V9a1 1 0 011-1V7a3 3 0 013-3h2V4a2 2 0 012-2zm0 2v1H8a1 1 0 00-1 1v1h10V6a1 1 0 00-1-1h-4zm-4 5a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
-        </div>
-        <div class="bot-header-info">
-          <strong>IncloBot</strong>
-          <span class="bot-status">
-            <span class="bot-live-dot" aria-hidden="true"></span>
-            Buscando ofertas ahora
-          </span>
-        </div>
-        <button type="button" class="bot-close" aria-label="Cerrar chat del asistente">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="bot-messages" aria-live="polite">
-        <div class="bot-msg">
-          ¡Hola! Soy <strong>IncloBot</strong>. Busco ofertas de empleo adaptadas a personas con discapacidad <strong>las 24 horas</strong>, los 7 días de la semana. 🤖
-        </div>
-        <div class="bot-msg bot-msg--delay">
-          ¿En qué ciudad de España buscas trabajo?
-        </div>
-        <div class="bot-quick-replies" role="group" aria-label="Respuestas rápidas">
-          <button type="button" class="bot-quick" data-city="madrid">📍 Madrid</button>
-          <button type="button" class="bot-quick" data-city="barcelona">📍 Barcelona</button>
-          <button type="button" class="bot-quick" data-city="remoto">🌐 Remoto</button>
-          <button type="button" class="bot-quick" data-city="otra">Otra ciudad</button>
-        </div>
-        <div class="bot-msg bot-msg--delay" style="margin-top:.75rem;font-weight:600;font-size:.82rem;">Últimas ofertas disponibles:</div>
-        <div class="bot-jobs-list" aria-live="polite" aria-label="Ofertas recientes"></div>
-      </div>
-    </div>
-
-    <button type="button" class="bot-toggle" id="bot-toggle" aria-expanded="false" aria-controls="bot-panel" aria-label="Abrir asistente de empleo IncloBot">
-      <div class="bot-toggle-pulse" aria-hidden="true"></div>
-      <svg class="bot-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a2 2 0 012 2v1h2a3 3 0 013 3v1a1 1 0 011 1v2a1 1 0 01-1 1v1a3 3 0 01-3 3H8a3 3 0 01-3-3v-1a1 1 0 01-1-1V9a1 1 0 011-1V7a3 3 0 013-3h2V4a2 2 0 012-2zm0 2v1H8a1 1 0 00-1 1v1h10V6a1 1 0 00-1-1h-4zm-4 5a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
-      <svg class="bot-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" hidden aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      <span class="bot-badge" aria-hidden="true">1</span>
-    </button>
-  </div>
-
   <!-- Scripts -->
   <script defer src="lib/gsap.min.js?v=20260519"></script>
   <script defer src="lib/ScrollTrigger.min.js?v=20260519"></script>
   <script defer src="lib/manifest.js?v=20260707"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script defer src="lib/auth.js?v=20260710"></script>
-  <script defer src="main.js?v=20260712"></script>
+  <script defer src="main.js?v=20260713"></script>
 </body>
 </html>
 

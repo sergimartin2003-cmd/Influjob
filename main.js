@@ -790,103 +790,6 @@
   }
 
   /* ─────────────────────────────────────────
-     BOT WIDGET
-  ───────────────────────────────────────── */
-  function initBot() {
-    const toggle  = $("#bot-toggle");
-    const panel   = $("#bot-panel");
-    const closeBtn = $(".bot-close");
-    const badge   = $(".bot-badge");
-    const iconOpen  = $(".bot-icon-open");
-    const iconClose = $(".bot-icon-close");
-    if (!toggle || !panel) return;
-
-    function openBot() {
-      panel.hidden = false;
-      toggle.setAttribute("aria-expanded", "true");
-      if (iconOpen) iconOpen.hidden = true;
-      if (iconClose) iconClose.hidden = false;
-      if (badge) badge.style.display = "none";
-    }
-
-    function closeBot() {
-      panel.hidden = true;
-      toggle.setAttribute("aria-expanded", "false");
-      if (iconOpen) iconOpen.hidden = false;
-      if (iconClose) iconClose.hidden = true;
-    }
-
-    function loadBotJobs() {
-      var list = $(".bot-jobs-list", panel);
-      if (!list) return;
-
-      // Use liveJobs if available, else fall back to manifest jobs
-      var jobs = (liveJobs && liveJobs.length ? liveJobs : data.jobs || []).slice(0, 3);
-      if (!jobs.length) {
-        list.innerHTML = '<p class="bot-empty">No hay ofertas disponibles aún.</p>';
-        return;
-      }
-
-      list.innerHTML = jobs.map(function(j) {
-        return '<div class="bot-job-card">' +
-          '<div class="bot-job-logo" style="background:' + j.color + '">' + escHTML(j.initials) + '</div>' +
-          '<div class="bot-job-info">' +
-            '<strong class="bot-job-title">' + escHTML(j.title) + '</strong>' +
-            '<span class="bot-job-meta">' + escHTML(j.company) + ' · ' + escHTML(j.city) + '</span>' +
-          '</div>' +
-          '<button type="button" class="bot-job-btn btn btn-sm btn-primary" data-open-modal="' + escHTML(j.id) + '">Ver</button>' +
-        '</div>';
-      }).join("");
-
-      // Wire up modal buttons inside bot panel
-      $$(".bot-job-btn", list).forEach(function(btn) {
-        btn.addEventListener("click", function() {
-          var id = btn.dataset.openModal;
-          closeBot();
-          // Trigger the existing modal open logic
-          var detailBtn = $('[data-open-modal="' + id + '"]');
-          if (detailBtn) detailBtn.click();
-        });
-      });
-    }
-
-    toggle.addEventListener("click", () => {
-      if (panel.hidden) { openBot(); loadBotJobs(); } else { closeBot(); }
-    });
-
-    closeBtn && closeBtn.addEventListener("click", () => { closeBot(); toggle.focus(); });
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape" && !panel.hidden) {
-        closeBot();
-        toggle.focus();
-      }
-    });
-
-    // Quick replies
-    $$(".bot-quick").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const city = btn.dataset.city;
-        if (!city || city === "otra") {
-          closeBot();
-          const citysel = $("#search-city");
-          if (citysel) citysel.focus();
-          return;
-        }
-
-        // Coordinate with the shared filter system
-        activeCity = norm(city);
-        const heroCity = $("#search-city");
-        if (heroCity) heroCity.value = city.charAt(0).toUpperCase() + city.slice(1);
-        applyFilters(true);
-        closeBot();
-        const empleos = $("#empleos");
-        if (empleos) empleos.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
-      });
-    });
-  }
-
-  /* ─────────────────────────────────────────
      NEWSLETTER FORM
   ───────────────────────────────────────── */
   function initNewsletter() {
@@ -1070,12 +973,6 @@
             statCount.textContent = n.toLocaleString("es-ES");
           }
 
-          var badge = $(".bot-badge");
-          if (badge) {
-            badge.textContent = n;
-            badge.style.display = n ? "" : "none";
-          }
-
           applyFilters();
         }).catch(function() { fetchInFlight = false; });
     }
@@ -1125,7 +1022,6 @@
     safe(initFilters,       "initFilters");
     safe(initHeroSearch,    "initHeroSearch");
     safe(initModal,         "initModal");
-    safe(initBot,           "initBot");
     safe(initNewsletter,    "initNewsletter");
     safe(initA11yToolbar,   "initA11yToolbar");
     safe(initTilt,          "initTilt");
